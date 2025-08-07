@@ -2,374 +2,543 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Text2 - Read HTML | Online HTML, CSS, JS Reader & Extractor Tool</title>
-  <meta name="description" content="Text2 - Read HTML: An online tool to read, preview, extract, and download HTML, CSS, JavaScript code easily. Supports quick preview and file export.">
-  <meta name="keywords" content="text2, read html, html reader, extract css js, html tool online, html preview, html to css js, html editor">
-  <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Code Editor - HTML, CSS, JS</title>
+  <meta name="description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview.">
   <link rel="icon" type="image/png" href="favicon.ico">
-  <link rel="canonical" href="https://html.text2.click/" />
-  <!-- Google tag (gtag.js) - GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ABCDEFG123"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-6J85STMJ14');
-  </script>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
   <style>
-    /* Reset CSS */
-    #fullscreenPopup * {
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    #fullscreenPopup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(248, 249, 250, 1);
-      z-index: 999999;
-      overflow-y: auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      animation: popupFadeIn 0.5s ease-in-out;
-      font-family: 'Segoe UI', sans-serif;
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    @keyframes popupFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
     }
 
-    #fullscreenPopup h1 {
+    /* Header */
+    .header {
       text-align: center;
-      background: linear-gradient(135deg, #343a40, #495057);
-      color: white;
-      margin: 0;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
     }
 
-    #fullscreenPopup h1:hover {
-      background: linear-gradient(135deg, #495057, #343a40);
-      transform: translateY(-2px);
+    .title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
     }
 
-    #fullscreenPopup .container {
-      padding: 20px;
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* Main Layout */
+    .main-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      max-width: 1200px;
-      margin: auto;
-      animation: containerSlideUp 0.5s ease-out;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
 
-    @keyframes containerSlideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    /* Sidebar */
+    .sidebar {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      height: fit-content;
     }
 
-    #fullscreenPopup .upload-section,
-    #fullscreenPopup .editor-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    .section {
+      margin-bottom: 2rem;
     }
 
-    #fullscreenPopup textarea {
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    /* File Upload */
+    .file-input {
       width: 100%;
-      height: 200px;
-      resize: vertical;
-      font-family: monospace;
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      background: #fff;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      color: var(--text);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
     }
 
-    #fullscreenPopup textarea:focus {
-      border-color: #28a745;
-      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+    .file-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #059669;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--primary);
+    }
+
+    /* Editor */
+    .editor-container {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .editor-tabs {
+      display: flex;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab.active {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+
+    .editor-content {
+      display: none;
+    }
+
+    .editor-content.active {
+      display: block;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      min-height: 400px;
+      padding: 1.5rem;
+      background: var(--bg);
+      border: none;
+      color: var(--text);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      resize: vertical;
       outline: none;
     }
 
-    #fullscreenPopup input[type="file"] {
-      display: block;
-      margin-top: 5px;
-      transition: all 0.3s ease;
+    .editor-textarea::placeholder {
+      color: var(--text-secondary);
     }
 
-    #fullscreenPopup input[type="file"]:hover {
-      transform: translateY(-2px);
+    /* Preview */
+    .preview-section {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
     }
 
-    #fullscreenPopup .preview-button {
-      text-align: center;
+    .preview-header {
+      padding: 1rem 1.5rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    #fullscreenPopup button {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #28a745, #218838);
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      margin: 10px 0;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .preview-title {
+      font-weight: 600;
+      color: var(--text);
     }
 
-    #fullscreenPopup button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      background: linear-gradient(135deg, #218838, #28a745);
-    }
-
-    #fullscreenPopup button:active {
-      transform: translateY(0);
-    }
-
-    #fullscreenPopup iframe {
+    .preview-iframe {
       width: 100%;
       height: 500px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: white;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    #fullscreenPopup iframe:hover {
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    #fullscreenPopup label {
-      font-weight: bold;
-      color: #495057;
-      transition: all 0.3s ease;
-    }
-
-    #fullscreenPopup label:hover {
-      color: #28a745;
-    }
-
-    #fullscreenPopup .section {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-    }
-
-    #fullscreenPopup .section:hover {
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-
-    #fullscreenPopup .editor-wrapper {
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s ease;
-    }
-
-    #fullscreenPopup .editor-wrapper:hover {
-      transform: translateY(-2px);
-    }
-
-    #fullscreenPopup input[type="file"]::file-selector-button {
-      padding: 8px 16px;
-      border-radius: 4px;
-      background: #28a745;
-      color: white;
       border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      background: white;
     }
 
-    #fullscreenPopup input[type="file"]::file-selector-button:hover {
-      background: #218838;
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: 2;
+      }
     }
 
-    #fullscreenPopup .preview-button button:first-child {
-      animation: buttonPulse 2s infinite;
+    @media (max-width: 768px) {
+      .container {
+        padding: 0.5rem;
+      }
+      
+      .title {
+        font-size: 1.5rem;
+      }
+      
+      .btn {
+        font-size: 0.8rem;
+        padding: 0.6rem 0.8rem;
+      }
     }
 
-    @keyframes buttonPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+
+    .toast.error {
+      background: #ef4444;
     }
   </style>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Text2 - Read HTML",
-    "description": "An online tool to read, preview, extract, and download HTML, CSS, JavaScript code easily.",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "All",
-    "url": "https://html.text2.click/",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
 </head>
 <body>
-  <div id="fullscreenPopup">
-    <h1>Text2 - Read HTML: HTML, CSS, JS Reader & Extractor Tool</h1>
-    <div class="container">
-      <div class="upload-section section">
-        <div>
-          <label for="htmlFile">🔺 Upload HTML</label>
-          <input accept=".html" id="htmlFile" onchange="loadAndFill(this, 'htmlCode')" type="file" />
-        </div>
-        <div>
-          <label for="cssFile">🔺 Upload CSS</label>
-          <input accept=".css" id="cssFile" onchange="loadAndFill(this, 'cssCode')" type="file" />
-        </div>
-        <div>
-          <label for="jsFile">🔺 Upload JavaScript</label>
-          <input accept=".js" id="jsFile" onchange="loadAndFill(this, 'jsCode')" type="file" />
-        </div>
-      </div>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">Simple Code Editor</h1>
+      <p class="subtitle">Write HTML, CSS, and JavaScript with live preview</p>
+    </header>
 
-      <div class="editor-section section">
-        <div class="editor-wrapper">
-          <label>HTML</label>
-          <textarea id="htmlCode" placeholder="Type HTML code here..."></textarea>
-          <button onclick="downloadCode('html')">Download HTML</button>
+    <!-- Main Content -->
+    <div class="main-grid">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="section">
+          <h3 class="section-title">📁 Upload Files</h3>
+          <input type="file" id="htmlFile" accept=".html,.htm" class="file-input" onchange="loadFile(this, 'htmlCode')" placeholder="HTML File">
+          <input type="file" id="cssFile" accept=".css" class="file-input" onchange="loadFile(this, 'cssCode')" placeholder="CSS File">
+          <input type="file" id="jsFile" accept=".js" class="file-input" onchange="loadFile(this, 'jsCode')" placeholder="JavaScript File">
         </div>
-        <div class="editor-wrapper">
-          <label>CSS</label>
-          <textarea id="cssCode" placeholder="Type CSS code here..."></textarea>
-          <button onclick="downloadCode('css')">Download CSS</button>
-        </div>
-        <div class="editor-wrapper">
-          <label>JavaScript</label>
-          <textarea id="jsCode" placeholder="Type JavaScript code here..."></textarea>
-          <button onclick="downloadCode('js')">Download JavaScript</button>
-        </div>
-      </div>
 
-      <div class="preview-button">
-        <button onclick="preview()">RUN NOW</button>
-        <button onclick="downloadHTML()">Download .html</button>
-        <button onclick="extractCSSAndJS()" style="background: linear-gradient(135deg, #007bff, #0056b3);">Extract CSS & JS</button>
-      </div>
+        <div class="section">
+          <h3 class="section-title">⚡ Actions</h3>
+          <button class="btn btn-primary" onclick="runCode()">Run Code</button>
+          <button class="btn btn-secondary" onclick="extractCode()">Extract CSS/JS</button>
+          <button class="btn btn-outline" onclick="formatCode()">Format Code</button>
+        </div>
 
-      <div class="section">
-        <label>text2 run result</label>
-        <button onclick="openInNewTab()" style="margin-bottom: 10px;">SEE ALL</button>
-        <iframe id="previewFrame" sandbox="allow-scripts"></iframe>
-      </div>
+        <div class="section">
+          <h3 class="section-title">💾 Download</h3>
+          <button class="btn btn-outline" onclick="downloadHTML()">Download HTML</button>
+          <button class="btn btn-outline" onclick="downloadCSS()">Download CSS</button>
+          <button class="btn btn-outline" onclick="downloadJS()">Download JS</button>
+        </div>
+      </aside>
+
+      <!-- Editor -->
+      <main class="editor-container">
+        <div class="editor-tabs">
+          <button class="tab active" onclick="switchTab('html')">HTML</button>
+          <button class="tab" onclick="switchTab('css')">CSS</button>
+          <button class="tab" onclick="switchTab('js')">JavaScript</button>
+        </div>
+        
+        <div class="editor-content active" id="html-content">
+          <textarea id="htmlCode" class="editor-textarea" placeholder="Enter your HTML code here..."></textarea>
+        </div>
+        <div class="editor-content" id="css-content">
+          <textarea id="cssCode" class="editor-textarea" placeholder="Enter your CSS code here..."></textarea>
+        </div>
+        <div class="editor-content" id="js-content">
+          <textarea id="jsCode" class="editor-textarea" placeholder="Enter your JavaScript code here..."></textarea>
+        </div>
+      </main>
     </div>
+
+    <!-- Preview -->
+    <section class="preview-section">
+      <div class="preview-header">
+        <h3 class="preview-title">Live Preview</h3>
+        <button class="btn btn-outline" onclick="openInNewTab()" style="width: auto; margin: 0;">Open in New Tab</button>
+      </div>
+      <iframe id="previewFrame" class="preview-iframe" sandbox="allow-scripts"></iframe>
+    </section>
   </div>
 
+  <!-- Toast Container -->
+  <div id="toastContainer"></div>
+
   <script>
+    let currentTab = 'html';
     let generatedHTML = '';
 
-    function readFileContent(inputElement, callback) {
-      const file = inputElement.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          callback(e.target.result);
-        };
-        reader.readAsText(file);
-      } else {
-        callback('');
-      }
-    }
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSampleCode();
+      setupEventListeners();
+      showToast('Welcome! Start coding to see the preview.', 'success');
+    });
 
-    function loadAndFill(input, textareaId) {
-      const textarea = document.getElementById(textareaId);
-      if (textarea.value.trim() !== '') {
-        if (!confirm('Nội dung cũ sẽ bị ghi đè. Tiếp tục?')) return;
-      }
-      readFileContent(input, function(content) {
-        textarea.value = content;
+    // Setup event listeners
+    function setupEventListeners() {
+      const textareas = document.querySelectorAll('.editor-textarea');
+      textareas.forEach(textarea => {
+        textarea.addEventListener('input', updatePreview);
       });
     }
 
-    function preview() {
+    // Switch tabs
+    function switchTab(tabName) {
+      currentTab = tabName;
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Show/hide content
+      document.querySelectorAll('.editor-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabName + '-content').classList.add('active');
+    }
+
+    // Load file
+    function loadFile(input, textareaId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const textarea = document.getElementById(textareaId);
+        textarea.value = e.target.result;
+        updatePreview();
+        showToast(`File "${file.name}" loaded!`, 'success');
+      };
+      reader.readAsText(file);
+    }
+
+    // Run code
+    function runCode() {
       const htmlCode = document.getElementById('htmlCode').value;
       const cssCode = document.getElementById('cssCode').value;
       const jsCode = document.getElementById('jsCode').value;
 
-      const fullHTML = `
+      generatedHTML = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>${cssCode}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor Output</title>
+    <style>${cssCode}</style>
 </head>
 <body>
-  ${htmlCode}
-  <script>${jsCode}<\/script>
+    ${htmlCode}
+    <script>${jsCode}<\/script>
 </body>
 </html>`;
 
-      generatedHTML = fullHTML;
-
       const iframe = document.getElementById('previewFrame');
-      iframe.srcdoc = fullHTML;
+      iframe.srcdoc = generatedHTML;
+      
+      showToast('Code executed successfully!', 'success');
     }
 
-    // Add event listeners for live preview
-    document.getElementById('htmlCode').addEventListener('input', preview);
-    document.getElementById('cssCode').addEventListener('input', preview);
-    document.getElementById('jsCode').addEventListener('input', preview);
+    // Update preview
+    function updatePreview() {
+      if (document.getElementById('htmlCode').value.trim() || 
+          document.getElementById('cssCode').value.trim() || 
+          document.getElementById('jsCode').value.trim()) {
+        runCode();
+      }
+    }
 
-    function downloadHTML() {
-      if (!generatedHTML) {
-        alert("You need to click 'RUN NOW' before downloading.");
+    // Extract code
+    function extractCode() {
+      const htmlContent = document.getElementById('htmlCode').value;
+      if (!htmlContent.trim()) {
+        showToast('Please enter HTML content first!', 'error');
         return;
       }
-      const blob = new Blob([generatedHTML], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "text2_output.html";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        
+        let extractedCSS = '';
+        let extractedJS = '';
+
+        // Extract CSS
+        doc.querySelectorAll('style').forEach(style => {
+          extractedCSS += style.textContent + '\n';
+          style.remove();
+        });
+
+        // Extract JS
+        doc.querySelectorAll('script').forEach(script => {
+          extractedJS += script.textContent + '\n';
+          script.remove();
+        });
+
+        // Update editors
+        if (extractedCSS.trim()) {
+          document.getElementById('cssCode').value = extractedCSS.trim();
+        }
+        if (extractedJS.trim()) {
+          document.getElementById('jsCode').value = extractedJS.trim();
+        }
+        document.getElementById('htmlCode').value = doc.body.innerHTML.trim();
+
+        showToast('CSS and JS extracted successfully!', 'success');
+        updatePreview();
+      } catch (error) {
+        showToast('Error extracting code', 'error');
+      }
     }
 
-    function downloadCode(type) {
-      let content = '';
-      let filename = '';
-      let mime = 'text/plain';
+    // Format code
+    function formatCode() {
+      const htmlCode = document.getElementById('htmlCode').value;
+      const cssCode = document.getElementById('cssCode').value;
+      const jsCode = document.getElementById('jsCode').value;
 
-      switch(type) {
-        case 'html':
-          content = document.getElementById('htmlCode').value;
-          filename = 'code.html';
-          mime = 'text/html';
-          break;
-        case 'css':
-          content = document.getElementById('cssCode').value;
-          filename = 'style.css';
-          mime = 'text/css';
-          break;
-        case 'js':
-          content = document.getElementById('jsCode').value;
-          filename = 'script.js';
-          mime = 'text/javascript';
-          break;
+      // Basic formatting
+      const formattedHTML = htmlCode.replace(/>\s+</g, '>\n<').trim();
+      const formattedCSS = cssCode.replace(/;\s*/g, ';\n  ').replace(/\{\s*/g, ' {\n  ').replace(/\s*\}\s*/g, '\n}\n').trim();
+      const formattedJS = jsCode.replace(/;\s*/g, ';\n').replace(/\{\s*/g, ' {\n').replace(/\s*\}\s*/g, '\n}\n').trim();
+
+      document.getElementById('htmlCode').value = formattedHTML;
+      document.getElementById('cssCode').value = formattedCSS;
+      document.getElementById('jsCode').value = formattedJS;
+
+      showToast('Code formatted!', 'success');
+    }
+
+    // Download functions
+    function downloadHTML() {
+      if (!generatedHTML) {
+        showToast('Please run the code first!', 'error');
+        return;
       }
+      downloadFile(generatedHTML, 'index.html', 'text/html');
+    }
 
-      const blob = new Blob([content], { type: mime });
+    function downloadCSS() {
+      const cssCode = document.getElementById('cssCode').value;
+      if (!cssCode.trim()) {
+        showToast('No CSS content!', 'error');
+        return;
+      }
+      downloadFile(cssCode, 'styles.css', 'text/css');
+    }
+
+    function downloadJS() {
+      const jsCode = document.getElementById('jsCode').value;
+      if (!jsCode.trim()) {
+        showToast('No JavaScript content!', 'error');
+        return;
+      }
+      downloadFile(jsCode, 'script.js', 'text/javascript');
+    }
+
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -378,74 +547,98 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      showToast(`Downloaded ${filename}!`, 'success');
     }
 
     function openInNewTab() {
       if (!generatedHTML) {
-        alert("You need to click 'RUN NOW' before opening in a new tab.");
+        showToast('Please run the code first!', 'error');
         return;
       }
-      const blob = new Blob([generatedHTML], { type: "text/html" });
+      const blob = new Blob([generatedHTML], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
     }
 
-    function extractCSSAndJS() {
-      const htmlContent = document.getElementById('htmlCode').value;
-      if (!htmlContent) {
-        alert("Please enter HTML in the HTML box before extracting CSS & JS");
-        return;
-      }
-      if ((document.getElementById('cssCode').value.trim() !== '' || document.getElementById('jsCode').value.trim() !== '')) {
-        if (!confirm('CSS hoặc JS hiện tại sẽ bị ghi đè. Tiếp tục?')) return;
-      }
+    // Load sample code
+    function loadSampleCode() {
+      document.getElementById('htmlCode').value = `<div class="container">
+  <h1>Hello World! 👋</h1>
+  <p>Welcome to the Simple Code Editor</p>
+  <button id="demoBtn">Click me!</button>
+</div>`;
 
-      // Sử dụng DOMParser để phân tích HTML
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, 'text/html');
+      document.getElementById('cssCode').value = `body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-      // Tách CSS từ thẻ <style>
-      let extractedCSS = '';
-      doc.querySelectorAll('style').forEach(style => {
-        extractedCSS += style.textContent + '\n';
-        style.remove();
-      });
+.container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
 
-      // Tách JS từ thẻ <script>
-      let extractedJS = '';
-      doc.querySelectorAll('script').forEach(script => {
-        extractedJS += script.textContent + '\n';
-        script.remove();
-      });
+h1 {
+  color: #333;
+  margin-bottom: 1rem;
+}
 
-      // Tách inline style thành class
-      let styleCount = 0;
-      doc.querySelectorAll('[style]').forEach(element => {
-        styleCount++;
-        const className = 'extracted-style-' + styleCount;
-        extractedCSS += `.${className} { ${element.getAttribute('style')} }\n`;
-        element.classList.add(className);
-        element.removeAttribute('style');
-      });
+p {
+  color: #666;
+  margin-bottom: 2rem;
+}
 
-      // Lấy lại HTML đã làm sạch
-      const cleanHTML = doc.body.innerHTML;
+button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
 
-      // Cập nhật các textarea
-      if (extractedCSS) {
-        document.getElementById('cssCode').value = extractedCSS.trim();
-      }
-      if (extractedJS) {
-        document.getElementById('jsCode').value = extractedJS.trim();
-      }
-      document.getElementById('htmlCode').value = cleanHTML.trim();
+button:hover {
+  transform: translateY(-2px);
+}`;
 
-      // Thông báo kết quả
-      if (extractedCSS || extractedJS || styleCount > 0) {
-        alert("Đã tách thành công CSS và JS!");
-      } else {
-        alert("Không tìm thấy CSS hoặc JS trong HTML!");
-      }
+      document.getElementById('jsCode').value = `document.getElementById('demoBtn').addEventListener('click', function() {
+  this.textContent = 'Thanks for clicking! 🎉';
+  this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+  
+  setTimeout(() => {
+    this.textContent = 'Click me!';
+    this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+  }, 2000);
+});`;
+
+      updatePreview();
+    }
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      
+      const container = document.getElementById('toastContainer');
+      container.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 100);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => container.removeChild(toast), 300);
+      }, 3000);
     }
   </script>
 </body>
