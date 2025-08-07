@@ -3,9 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Code Editor - HTML, CSS, JS</title>
-  <meta name="description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview.">
-  <link rel="icon" type="image/png" href="favicon.ico">
+  <title>Text2 - HTML Editor | Simple Online Code Editor for HTML, CSS, JavaScript</title>
+  <meta name="description" content="Text2 HTML Editor - Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
+  <meta name="keywords" content="text2, html editor, online code editor, web development, html css javascript, live preview, code testing">
+  <meta name="author" content="Text2">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://html.text2.click">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
+  <link rel="apple-touch-icon" href="favicon.ico">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://html.text2.click">
+  <meta property="og:title" content="Text2 - HTML Editor | Simple Online Code Editor">
+  <meta property="og:description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
+  <meta property="og:image" content="https://html.text2.click/favicon.ico">
+  <meta property="og:site_name" content="Text2">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://html.text2.click">
+  <meta property="twitter:title" content="Text2 - HTML Editor | Simple Online Code Editor">
+  <meta property="twitter:description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
+  <meta property="twitter:image" content="https://html.text2.click/favicon.ico">
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="msapplication-TileColor" content="#3b82f6">
+  <meta name="application-name" content="Text2 HTML Editor">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Text2 HTML Editor",
+    "description": "Simple and clean online code editor for HTML, CSS, and JavaScript with live preview",
+    "url": "https://html.text2.click",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Text2",
+      "url": "https://text2.click",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://text2.click/favicon.ico"
+      }
+    },
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://html.text2.click/favicon.ico"
+    },
+    "screenshot": "https://html.text2.click/favicon.ico",
+    "featureList": [
+      "HTML Editor",
+      "CSS Editor", 
+      "JavaScript Editor",
+      "Live Preview",
+      "File Upload",
+      "Code Download",
+      "Code Formatting"
+    ]
+  }
+  </script>
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -44,21 +116,64 @@
 
     /* Header */
     .header {
-      text-align: center;
       padding: 2rem 0;
       border-bottom: 1px solid var(--border);
       margin-bottom: 2rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .main-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .brand-info {
+      text-align: left;
     }
 
     .title {
       font-size: 2rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
+      color: var(--text);
     }
 
     .subtitle {
       color: var(--text-secondary);
       font-size: 1rem;
+      max-width: 500px;
+    }
+
+    .company-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .company-logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+
+    .company-logo-img:hover {
+      transform: scale(1.1);
     }
 
     /* Main Layout */
@@ -258,8 +373,31 @@
         padding: 0.5rem;
       }
       
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .logo-section {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .brand-info {
+        text-align: center;
+      }
+      
       .title {
         font-size: 1.5rem;
+      }
+      
+      .subtitle {
+        max-width: 100%;
+      }
+      
+      .company-logo {
+        margin-top: 1rem;
       }
       
       .btn {
@@ -293,14 +431,87 @@
     .toast.error {
       background: #ef4444;
     }
+
+    /* Footer */
+    .footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+      padding: 3rem 0 1rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .footer-section p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section ul li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-section ul li a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Header -->
     <header class="header">
-      <h1 class="title">Simple Code Editor</h1>
-      <p class="subtitle">Write HTML, CSS, and JavaScript with live preview</p>
+      <div class="header-content">
+        <div class="logo-section">
+          <img src="favicon.ico" alt="Text2 HTML Editor Logo" class="main-logo">
+          <div class="brand-info">
+            <h1 class="title">Text2 HTML Editor</h1>
+            <p class="subtitle">Simple and clean online code editor for HTML, CSS, and JavaScript with live preview</p>
+          </div>
+        </div>
+        <div class="company-logo">
+          <a href="https://text2.click" target="_blank" rel="noopener">
+            <img src="https://text2.click/favicon.ico" alt="Text2 Company Logo" class="company-logo-img">
+          </a>
+        </div>
+      </div>
     </header>
 
     <!-- Main Content -->
@@ -359,8 +570,39 @@
     </section>
   </div>
 
-  <!-- Toast Container -->
-  <div id="toastContainer"></div>
+      <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Text2 HTML Editor</h4>
+          <p>Free online code editor for HTML, CSS, and JavaScript with live preview. Perfect for web development and testing.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Features</h4>
+          <ul>
+            <li>HTML Editor</li>
+            <li>CSS Editor</li>
+            <li>JavaScript Editor</li>
+            <li>Live Preview</li>
+            <li>File Upload</li>
+            <li>Code Download</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="https://text2.click" target="_blank" rel="noopener">Text2 Homepage</a></li>
+            <li><a href="https://html.text2.click" target="_blank" rel="noopener">HTML Editor</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Text2. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
 
   <script>
     let currentTab = 'html';
