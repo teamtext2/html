@@ -1,887 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text2 - HTML Editor | Simple Online Code Editor for HTML, CSS, JavaScript</title>
-  <meta name="description" content="Text2 HTML Editor - Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
-  <meta name="keywords" content="text2, html editor, online code editor, web development, html css javascript, live preview, code testing">
-  <meta name="author" content="Text2">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://html.text2.click">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
-  <link rel="apple-touch-icon" href="favicon.ico">
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://html.text2.click">
-  <meta property="og:title" content="Text2 - HTML Editor | Simple Online Code Editor">
-  <meta property="og:description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
-  <meta property="og:image" content="https://html.text2.click/favicon.ico">
-  <meta property="og:site_name" content="Text2">
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://html.text2.click">
-  <meta property="twitter:title" content="Text2 - HTML Editor | Simple Online Code Editor">
-  <meta property="twitter:description" content="Simple and clean online code editor for HTML, CSS, and JavaScript with live preview. Free web development tool for coding and testing.">
-  <meta property="twitter:image" content="https://html.text2.click/favicon.ico">
-  
-  <!-- Additional SEO Meta Tags -->
-  <meta name="theme-color" content="#3b82f6">
-  <meta name="msapplication-TileColor" content="#3b82f6">
-  <meta name="application-name" content="Text2 HTML Editor">
-  
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Text2 HTML Editor",
-    "description": "Simple and clean online code editor for HTML, CSS, and JavaScript with live preview",
-    "url": "https://html.text2.click",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Web Browser",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Text2",
-      "url": "https://text2.click",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://text2.click/favicon.ico"
-      }
-    },
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://html.text2.click/favicon.ico"
-    },
-    "screenshot": "https://html.text2.click/favicon.ico",
-    "featureList": [
-      "HTML Editor",
-      "CSS Editor", 
-      "JavaScript Editor",
-      "Live Preview",
-      "File Upload",
-      "Code Download",
-      "Code Formatting"
-    ]
-  }
-  </script>
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pro Code Studio — Single‑File Web IDE</title>
+  <meta name="description" content="A professional, single-file web code editor with HTML/CSS/JS tabs, live preview, console, autosave, theme, and export/import." />
   <style>
-    :root {
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --success: #10b981;
-      --bg: #0f172a;
-      --card: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --text-secondary: #cbd5e1;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    :root{
+      --bg:#0f1220; --panel:#14182b; --muted:#8a91b4; --text:#f4f6ff; --accent:#6ee7ff; --accent-2:#a78bfa; --danger:#ff6b6b; --ok:#34d399; --warn:#fbbf24; --border:#232847;
+      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
+    [data-theme="light"]{ --bg:#fafafa; --panel:#ffffff; --muted:#6b7280; --text:#0b1020; --accent:#2563eb; --accent-2:#7c3aed; --danger:#dc2626; --ok:#059669; --warn:#d97706; --border:#e5e7eb; }
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; background:linear-gradient(180deg,var(--bg),#0b0e1a 60%); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"; }
+    .app{ display:grid; grid-template-rows: 56px 1fr 180px; height:100%; }
+    header{ display:flex; align-items:center; gap:10px; padding:10px 12px; background:rgba(20,24,43,.8); border-bottom:1px solid var(--border); backdrop-filter:saturate(140%) blur(6px); position:sticky; top:0; z-index:10; }
+    .badge{ font-weight:700; letter-spacing:.4px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .title{ font-size:14px; opacity:.9; }
+    .spacer{ flex:1; }
+    button, .btn{ 
+      appearance:none; border:1px solid var(--border); color:var(--text); background:linear-gradient(180deg, var(--panel), rgba(255,255,255,0.02));
+      padding:8px 12px; border-radius:12px; font-weight:600; font-size:13px; cursor:pointer; transition:.2s ease; box-shadow:0 0 0 0 rgba(0,0,0,0);
+    }
+    button:hover{ transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,0,0,.25); }
+    button.primary{ border-color:transparent; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#0b1020; }
+    button.ghost{ background:transparent; }
+    .toggle{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Main work area */
+    .work{ display:grid; grid-template-columns: 1.1fr 8px 1fr; min-height:0; }
+    .resizer{ background:var(--border); cursor:col-resize; }
+    .left, .right{ min-height:0; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    /* Header */
-    .header {
-      padding: 2rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .logo-section {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .main-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
-      object-fit: contain;
-    }
-
-    .brand-info {
-      text-align: left;
-    }
-
-    .title {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-
-    .subtitle {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      max-width: 500px;
-    }
-
-    .company-logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .company-logo-img {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      object-fit: contain;
-      transition: transform 0.2s ease;
-    }
-
-    .company-logo-img:hover {
-      transform: scale(1.1);
-    }
-
-    /* Main Layout */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 1.5rem;
-      border: 1px solid var(--border);
-      height: fit-content;
-    }
-
-    .section {
-      margin-bottom: 2rem;
-    }
-
-    .section:last-child {
-      margin-bottom: 0;
-    }
-
-    .section-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--text);
-    }
-
-    /* File Upload */
-    .file-input {
-      width: 100%;
-      padding: 0.75rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .file-input:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    /* Buttons */
-    .btn {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-bottom: 0.5rem;
-      font-size: 0.875rem;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    .btn-secondary {
-      background: var(--success);
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background: #059669;
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--primary);
-    }
+    /* Tabs + editors */
+    .tabs{ display:flex; gap:6px; padding:10px; border-bottom:1px solid var(--border); background:var(--panel); position:sticky; top:0; z-index:5; }
+    .tab{ padding:8px 12px; border-radius:10px; border:1px solid var(--border); font-weight:600; font-size:13px; background:rgba(255,255,255,0.02); cursor:pointer; }
+    .tab.active{ background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); outline:2px solid transparent; }
+    .editor-wrap{ position:relative; height:100%; }
 
     /* Editor */
-    .editor-container {
-      background: var(--card);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
+    .editor{ height:100%; width:100%; display:grid; grid-template-columns: 48px 1fr; background:radial-gradient(60% 80% at 20% 20%, rgba(111,114,255,0.08), transparent 60%); }
+    .gutter{ border-right:1px solid var(--border); color:var(--muted); padding:10px 6px; overflow:auto; }
+    .code{ padding:10px 14px; font: 13px/1.6 var(--font); color:var(--text); overflow:auto; }
+    .code[contenteditable="true"]{ outline:none; white-space:pre; }
 
-    .editor-tabs {
-      display: flex;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab {
-      flex: 1;
-      padding: 1rem;
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tab.active {
-      background: var(--card);
-      color: var(--text);
-    }
-
-    .tab:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-    }
-
-    .editor-content {
-      display: none;
-    }
-
-    .editor-content.active {
-      display: block;
-    }
-
-    .editor-textarea {
-      width: 100%;
-      min-height: 400px;
-      padding: 1.5rem;
-      background: var(--bg);
-      border: none;
-      color: var(--text);
-      font-family: 'Fira Code', monospace;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      resize: vertical;
-      outline: none;
-    }
-
-    .editor-textarea::placeholder {
-      color: var(--text-secondary);
-    }
+    /* Line numbers */
+    .gutter ol{ list-style:none; margin:0; padding:0; counter-reset:line; }
+    .gutter li{ counter-increment:line; padding:0 6px; height:21px; line-height:21px; }
+    .gutter li::before{ content:counter(line); opacity:.6; }
 
     /* Preview */
-    .preview-section {
-      background: var(--card);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
+    .right{ display:grid; grid-template-rows: 44px 1fr; border-left:1px solid var(--border); background:var(--panel); }
+    .right .bar{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-bottom:1px solid var(--border); }
+    iframe{ width:100%; height:100%; border:0; background:#fff; }
 
-    .preview-header {
-      padding: 1rem 1.5rem;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    /* Console */
+    .console{ border-top:1px solid var(--border); background:var(--panel); display:grid; grid-template-rows: 36px 1fr; }
+    .console .bar{ display:flex; align-items:center; gap:10px; padding:6px 10px; border-bottom:1px solid var(--border); }
+    .log{ padding:8px 12px; overflow:auto; font: 12px/1.5 var(--font); }
+    .log .row{ padding:6px 8px; border-bottom:1px dashed var(--border); white-space:pre-wrap; word-break:break-word; }
+    .log .row.ok{ color:var(--ok); }
+    .log .row.warn{ color:var(--warn); }
+    .log .row.err{ color:var(--danger); }
 
-    .preview-title {
-      font-weight: 600;
-      color: var(--text);
-    }
+    /* Search */
+    .searchbox{ display:none; position:absolute; top:10px; right:10px; gap:6px; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+    .searchbox.show{ display:flex; }
+    .searchbox input{ background:transparent; border:0; outline:0; color:var(--text); font: 12px var(--font); }
 
-    .preview-iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      background: white;
-    }
+    /* Small tweaks */
+    .hint{ color:var(--muted); font-size:12px; }
+    .kbd{ padding:2px 6px; border:1px solid var(--border); border-radius:6px; font:12px var(--font); }
+    .hidden{ display:none !important; }
+    .float-right{ margin-left:auto; }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .sidebar {
-        order: 2;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 0.5rem;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-      
-      .logo-section {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      
-      .brand-info {
-        text-align: center;
-      }
-      
-      .title {
-        font-size: 1.5rem;
-      }
-      
-      .subtitle {
-        max-width: 100%;
-      }
-      
-      .company-logo {
-        margin-top: 1rem;
-      }
-      
-      .btn {
-        font-size: 0.8rem;
-        padding: 0.6rem 0.8rem;
-      }
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      color: white;
-      font-weight: 500;
-      z-index: 1000;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-
-    .toast.show {
-      transform: translateX(0);
-    }
-
-    .toast.success {
-      background: var(--success);
-    }
-
-    .toast.error {
-      background: #ef4444;
-    }
-
-    /* Footer */
-    .footer {
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
-      padding: 3rem 0 1rem;
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .footer-section h4 {
-      color: var(--text);
-      font-weight: 600;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .footer-section p {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .footer-section ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .footer-section ul li {
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-section ul li a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .footer-section ul li a:hover {
-      color: var(--primary);
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      color: var(--text-secondary);
-    }
-
-    @media (max-width: 768px) {
-      .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-    }
+    @media (max-width: 980px){ .work{ grid-template-columns: 1fr; } .resizer{ display:none; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="logo-section">
-          <img src="favicon.ico" alt="Text2 HTML Editor Logo" class="main-logo">
-          <div class="brand-info">
-            <h1 class="title">Text2 HTML Editor</h1>
-            <p class="subtitle">Simple and clean online code editor for HTML, CSS, and JavaScript with live preview</p>
-          </div>
-        </div>
-        <div class="company-logo">
-          <a href="https://text2.click" target="_blank" rel="noopener">
-            <img src="https://text2.click/favicon.ico" alt="Text2 Company Logo" class="company-logo-img">
-          </a>
-        </div>
-      </div>
+  <div class="app" id="app" data-theme="dark">
+    <header>
+      <div class="badge">Pro Code Studio</div>
+      <div class="title">Single‑file Web IDE</div>
+      <div class="spacer"></div>
+      <div class="toggle" id="themeToggle" role="button" title="Đổi theme (Dark/Light)">🌙<span class="hint">Theme</span></div>
+      <button class="ghost" id="newBtn" title="Tạo mới (Alt+N)">Mới</button>
+      <button id="importBtn" class="ghost" title="Nhập dự án (.json)">Nhập</button>
+      <button id="exportBtn" class="ghost" title="Xuất dự án (.json)">Xuất</button>
+      <button id="downloadBtn" class="ghost" title="Tải xuống index.html">Tải xuống</button>
+      <button class="primary" id="runBtn" title="Chạy (Ctrl/⌘ + Enter)">Chạy</button>
+      <button id="stopBtn" title="Dừng preview">Dừng</button>
+      <input id="fileInput" type="file" accept="application/json" class="hidden" />
     </header>
 
-    <!-- Main Content -->
-    <div class="main-grid">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="section">
-          <h3 class="section-title">📁 Upload Files</h3>
-          <input type="file" id="htmlFile" accept=".html,.htm" class="file-input" onchange="loadFile(this, 'htmlCode')" placeholder="HTML File">
-          <input type="file" id="cssFile" accept=".css" class="file-input" onchange="loadFile(this, 'cssCode')" placeholder="CSS File">
-          <input type="file" id="jsFile" accept=".js" class="file-input" onchange="loadFile(this, 'jsCode')" placeholder="JavaScript File">
+    <main class="work">
+      <section class="left">
+        <nav class="tabs" id="tabs"></nav>
+        <div class="editor-wrap">
+          <div class="searchbox" id="searchBox">
+            <input id="searchInput" placeholder="Tìm (Ctrl+F)" />
+            <input id="replaceInput" placeholder="Thay (Ctrl+H)" />
+            <button id="prevBtn">⬆</button>
+            <button id="nextBtn">⬇</button>
+            <button id="replaceOneBtn">Thay</button>
+            <button id="replaceAllBtn">Thay tất</button>
+            <button id="closeSearch">✕</button>
+          </div>
+          <div class="editor" id="editor">
+            <div class="gutter"><ol id="lines"></ol></div>
+            <pre class="code" id="code" contenteditable="true" spellcheck="false"></pre>
+          </div>
         </div>
+      </section>
+      <div class="resizer" id="resizer" title="Kéo để thay đổi kích thước"></div>
+      <section class="right">
+        <div class="bar">
+          <span class="hint">Live Preview</span>
+          <span class="hint">| Sandbox</span>
+          <span class="hint float-right">Tip: <span class="kbd">Ctrl/⌘</span> + <span class="kbd">Enter</span> để chạy • <span class="kbd">Ctrl/⌘</span> + <span class="kbd">S</span> để lưu</span>
+        </div>
+        <iframe id="preview" sandbox="allow-scripts allow-same-origin" title="Preview"></iframe>
+      </section>
+    </main>
 
-        <div class="section">
-          <h3 class="section-title">⚡ Actions</h3>
-          <button class="btn btn-primary" onclick="runCode()">Run Code</button>
-          <button class="btn btn-secondary" onclick="extractCode()">Extract CSS/JS</button>
-          <button class="btn btn-outline" onclick="formatCode()">Format Code</button>
-        </div>
-
-        <div class="section">
-          <h3 class="section-title">💾 Download</h3>
-          <button class="btn btn-outline" onclick="downloadHTML()">Download HTML</button>
-          <button class="btn btn-outline" onclick="downloadCSS()">Download CSS</button>
-          <button class="btn btn-outline" onclick="downloadJS()">Download JS</button>
-        </div>
-      </aside>
-
-      <!-- Editor -->
-      <main class="editor-container">
-        <div class="editor-tabs">
-          <button class="tab active" onclick="switchTab('html')">HTML</button>
-          <button class="tab" onclick="switchTab('css')">CSS</button>
-          <button class="tab" onclick="switchTab('js')">JavaScript</button>
-        </div>
-        
-        <div class="editor-content active" id="html-content">
-          <textarea id="htmlCode" class="editor-textarea" placeholder="Enter your HTML code here..."></textarea>
-        </div>
-        <div class="editor-content" id="css-content">
-          <textarea id="cssCode" class="editor-textarea" placeholder="Enter your CSS code here..."></textarea>
-        </div>
-        <div class="editor-content" id="js-content">
-          <textarea id="jsCode" class="editor-textarea" placeholder="Enter your JavaScript code here..."></textarea>
-        </div>
-      </main>
-    </div>
-
-    <!-- Preview -->
-    <section class="preview-section">
-      <div class="preview-header">
-        <h3 class="preview-title">Live Preview</h3>
-        <button class="btn btn-outline" onclick="openInNewTab()" style="width: auto; margin: 0;">Open in New Tab</button>
+    <section class="console">
+      <div class="bar">
+        <strong>Console</strong>
+        <button id="clearLog" class="ghost">Xoá</button>
       </div>
-      <iframe id="previewFrame" class="preview-iframe" sandbox="allow-scripts"></iframe>
+      <div class="log" id="log"></div>
     </section>
   </div>
 
-      <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>Text2 HTML Editor</h4>
-          <p>Free online code editor for HTML, CSS, and JavaScript with live preview. Perfect for web development and testing.</p>
-        </div>
-        <div class="footer-section">
-          <h4>Features</h4>
-          <ul>
-            <li>HTML Editor</li>
-            <li>CSS Editor</li>
-            <li>JavaScript Editor</li>
-            <li>Live Preview</li>
-            <li>File Upload</li>
-            <li>Code Download</li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="https://text2.click" target="_blank" rel="noopener">Text2 Homepage</a></li>
-            <li><a href="https://html.text2.click" target="_blank" rel="noopener">HTML Editor</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2024 Text2. All rights reserved.</p>
-      </div>
-    </footer>
-
-    <!-- Toast Container -->
-    <div id="toastContainer"></div>
-
   <script>
-    let currentTab = 'html';
-    let generatedHTML = '';
+  // --- Core state ---
+  const DEFAULT_PROJECT = {
+    active: 'index.html',
+    files: {
+      'index.html': `<!doctype html>\n<html lang="vi">\n<head>\n  <meta charset="utf-8"/>\n  <meta name="viewport" content="width=device-width, initial-scale=1"/>\n  <title>Xin chào Pro Code Studio</title>\n  <style>\n    body{font:16px system-ui; margin:40px; line-height:1.6;}\n    h1{color:#2563eb;}\n    .card{border:1px solid #e5e7eb; border-radius:16px; padding:20px; box-shadow:0 6px 20px rgba(0,0,0,.06);}\n  </style>\n</head>\n<body>\n  <h1>👋 Hello, thế giới!</h1>\n  <p>Bạn đang ở tab <code>index.html</code>. Hãy mở các tab <strong>style.css</strong> và <strong>app.js</strong> để tiếp tục.</p>\n  <div class="card">Sửa nội dung này và nhấn <kbd>Ctrl/⌘</kbd> + <kbd>Enter</kbd> để xem preview bên phải.</div>\n</body>\n</html>` ,
+      'style.css': `:root{--c:#7c3aed;}\nbody{font:16px system-ui;margin:0} .hero{padding:48px;text-align:center;background:linear-gradient(90deg,#2563eb22,#7c3aed22)} h1{color:var(--c)}`,
+      'app.js': `console.log('Xin chào từ app.js!');\n\n// Ví dụ nhỏ: DOM ready\ndocument.addEventListener('DOMContentLoaded',()=>{\n  const el=document.createElement('div');\n  el.textContent='JavaScript đã sẵn sàng ✨';\n  el.style.cssText='position:fixed;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:#000000aa;color:#fff;font:12px ui-monospace';\n  document.body.appendChild(el);\n  setTimeout(()=>el.remove(),2200);\n});`
+    }
+  };
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-      loadSampleCode();
-      setupEventListeners();
-      showToast('Welcome! Start coding to see the preview.', 'success');
+  let project = load() || DEFAULT_PROJECT;
+  let current = project.active;
+
+  // --- Elements ---
+  const tabsEl = document.getElementById('tabs');
+  const codeEl = document.getElementById('code');
+  const linesEl = document.getElementById('lines');
+  const preview = document.getElementById('preview');
+  const logEl = document.getElementById('log');
+  const searchBox = document.getElementById('searchBox');
+  const searchInput = document.getElementById('searchInput');
+  const replaceInput = document.getElementById('replaceInput');
+
+  // --- UI Build ---
+  function renderTabs(){
+    tabsEl.innerHTML = '';
+    Object.keys(project.files).forEach(name => {
+      const b=document.createElement('button');
+      b.className='tab'+(current===name?' active':'');
+      b.textContent=name;
+      b.onclick=()=>{ saveCurrent(); current=name; renderTabs(); loadEditor(); };
+      b.oncontextmenu=(e)=>{ e.preventDefault(); renameFile(name); };
+      tabsEl.appendChild(b);
     });
+    const addBtn=document.createElement('button');
+    addBtn.className='tab'; addBtn.textContent='＋'; addBtn.title='Thêm file';
+    addBtn.onclick=()=>{ const n=prompt('Tên file (vd: script.js, style.css, about.html):'); if(!n) return; if(project.files[n]) return alert('Đã tồn tại.'); project.files[n]=''; current=n; renderTabs(); loadEditor(); persist(); };
+    tabsEl.appendChild(addBtn);
+  }
 
-    // Setup event listeners
-    function setupEventListeners() {
-      const textareas = document.querySelectorAll('.editor-textarea');
-      textareas.forEach(textarea => {
-        textarea.addEventListener('input', updatePreview);
-      });
+  function renameFile(name){
+    const n=prompt('Đổi tên file:', name); if(!n||n===name) return;
+    if(project.files[n]) return alert('Tên đã tồn tại.');
+    project.files[n]=project.files[name]; delete project.files[name];
+    if(current===name) current=n; renderTabs(); loadEditor(); persist();
+  }
+
+  function loadEditor(){ codeEl.textContent = project.files[current] || ''; syncLines(); placeCaretAtEnd(codeEl); highlight(); }
+  function saveCurrent(){ project.files[current] = codeEl.textContent; }
+
+  function syncLines(){
+    const count = (codeEl.textContent.match(/\n/g)||[]).length + 1;
+    let html=''; for(let i=1;i<=count;i++) html += `<li></li>`;
+    linesEl.innerHTML = html;
+  }
+
+  // --- Simple highlighting (regex based, lightweight) ---
+  function highlight(){
+    // Minimal token coloring using CSS custom spans — not a full parser.
+    const lang = getLang(current);
+    const src = codeEl.textContent;
+    let h = escapeHtml(src);
+    if(lang==='html'){
+      h = h
+        .replace(/(&lt;!--[\s\S]*?--&gt;)/g,'<span style="opacity:.6">$1<\/span>')
+        .replace(/(&lt;\/?)([a-zA-Z0-9-:]+)/g,'$1<span style="color:#6ee7ff">$2<\/span>')
+        .replace(/([a-zA-Z-:]+)=(&quot;.*?&quot;|'.*?')/g,'<span style="color:#a78bfa">$1<\/span>=<span style="color:#34d399">$2<\/span>');
+    } else if(lang==='css'){
+      h = h
+        .replace(/\/\*[\s\S]*?\*\//g,'<span style="opacity:.6">$&<\/span>')
+        .replace(/([^{\s][^{]*?)\s*\{/g,'<span style="color:#6ee7ff">$1<\/span>{')
+        .replace(/(:)\s*([^;\n]+)(;?)/g,'$1 <span style="color:#34d399">$2<\/span>$3');
+    } else { // js
+      h = h
+        .replace(/\/\/[^"]*?$/gm,'<span style="opacity:.6">$&<\/span>')
+        .replace(/("[^"]*"|'[^']*'|`[^`]*`)/g,'<span style="color:#34d399">$1<\/span>')
+        .replace(/\b(const|let|var|function|return|if|else|for|while|class|new|try|catch|await|async|import|from|export|default)\b/g,'<span style="color:#a78bfa">$1<\/span>');
     }
+    codeEl.innerHTML = h.replace(/\n/g,'<br/>');
+  }
 
-    // Switch tabs
-    function switchTab(tabName) {
-      currentTab = tabName;
-      
-      // Update tab buttons
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      event.target.classList.add('active');
-      
-      // Show/hide content
-      document.querySelectorAll('.editor-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.getElementById(tabName + '-content').classList.add('active');
+  function getLang(name){
+    if(name.endsWith('.html')) return 'html';
+    if(name.endsWith('.css')) return 'css';
+    return 'js';
+  }
+
+  function escapeHtml(s){ return s.replace(/[&<>\"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
+
+  // --- Editor behaviors ---
+  codeEl.addEventListener('input', () => { saveCurrent(); syncLines(); highlight(); persistSoon(); });
+  codeEl.addEventListener('scroll', () => { document.querySelector('.gutter').scrollTop = codeEl.scrollTop; });
+  codeEl.addEventListener('keydown', (e)=>{
+    if(e.key==='Tab'){ e.preventDefault(); insertText('  '); }
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); persistNow(true); toast('Đã lưu vào trình duyệt'); }
+    if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); run(); }
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); toggleSearch(true); }
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='h'){ e.preventDefault(); toggleSearch(true); replaceInput.focus(); }
+    if((e.ctrlKey||e.metaKey) && e.key==='/'){ e.preventDefault(); toggleComment(); }
+  });
+
+  function insertText(text){
+    const sel = window.getSelection();
+    if(!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(text));
+    range.collapse(false);
+  }
+
+  function toggleComment(){
+    const lang=getLang(current);
+    const sel = window.getSelection(); if(!sel.rangeCount) return;
+    const r = sel.getRangeAt(0);
+    // naive line toggle
+    const start = r.startOffset, end = r.endOffset;
+    const t = codeEl.textContent;
+    let before=t.slice(0,start), mid=t.slice(start,end), after=t.slice(end);
+    if(lang==='html'){
+      if(mid.startsWith('<!--') && mid.endsWith('-->')) mid=mid.slice(4,-3); else mid='<!--'+mid+'-->';
+    } else if(lang==='css'){
+      if(mid.startsWith('/*') && mid.endsWith('*/')) mid=mid.slice(2,-2); else mid='/*'+mid+'*/';
+    } else {
+      if(mid.startsWith('//')) mid=mid.replace(/^\/\//,''); else mid='//'+mid;
     }
+    codeEl.textContent = before+mid+after; saveCurrent(); syncLines(); highlight();
+  }
 
-    // Load file
-    function loadFile(input, textareaId) {
-      const file = input.files[0];
-      if (!file) return;
+  // --- Search & Replace ---
+  let searchIndex = 0; let matches = [];
+  function toggleSearch(show){ searchBox.classList.toggle('show', !!show); if(show){ searchInput.focus(); refreshMatches(); } }
+  function refreshMatches(){
+    const q = searchInput.value;
+    matches = []; searchIndex=0; if(!q) return;
+    const text = codeEl.textContent; let idx=-1; while((idx=text.indexOf(q, idx+1))!==-1) matches.push(idx);
+    jumpToMatch(0);
+  }
+  function jumpToMatch(i){ if(!matches.length) return; searchIndex=(i+matches.length)%matches.length; setCaret(matches[searchIndex]); }
+  function setCaret(pos){
+    const node = codeEl.firstChild; if(!node) return; const range=document.createRange(); const sel=window.getSelection();
+    range.setStart(node, Math.min(pos, node.length||0)); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); codeEl.focus();
+  }
+  document.getElementById('prevBtn').onclick=()=>jumpToMatch(searchIndex-1);
+  document.getElementById('nextBtn').onclick=()=>jumpToMatch(searchIndex+1);
+  document.getElementById('replaceOneBtn').onclick=()=>replaceOnce();
+  document.getElementById('replaceAllBtn').onclick=()=>replaceAll();
+  document.getElementById('closeSearch').onclick=()=>toggleSearch(false);
+  searchInput.oninput=refreshMatches;
+  function replaceOnce(){ if(!matches.length) return; const q=searchInput.value, r=replaceInput.value; const pos=matches[searchIndex]; const t=codeEl.textContent; codeEl.textContent=t.slice(0,pos)+r+t.slice(pos+q.length); saveCurrent(); syncLines(); highlight(); refreshMatches(); }
+  function replaceAll(){ const q=searchInput.value, r=replaceInput.value; codeEl.textContent=codeEl.textContent.split(q).join(r); saveCurrent(); syncLines(); highlight(); refreshMatches(); }
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const textarea = document.getElementById(textareaId);
-        textarea.value = e.target.result;
-        updatePreview();
-        showToast(`File "${file.name}" loaded!`, 'success');
-      };
-      reader.readAsText(file);
-    }
+  // --- Preview runner ---
+  function buildHTML(){
+    const html = project.files['index.html'] || '';
+    const css = project.files['style.css'] || '';
+    const js  = project.files['app.js'] || '';
+    const payload = `<!doctype html><html><head><meta charset=\"utf-8\"><style>${css.replace(/<\//g,'<\\/')}</style></head><body>`
+      + html.replace(/<\/(script)/g,'<\\/$1')
+      + `<script>(function(){\n const send=(type,...args)=>parent.postMessage({type, args}, '*');\n ['log','warn','error'].forEach(k=>{const _=console[k].bind(console); console[k]=(...a)=>{send('console:'+k, ...a); _(...a);} });\n window.addEventListener('error',e=>send('error', String(e.message||e.error)));\n try{${js.replace(/<\//g,'<\\/')}}catch(e){send('error', String(e.message||e));}\n})();<\/script>`
+      + `</body></html>`;
+    return payload;
+  }
 
-    // Run code
-    function runCode() {
-      const htmlCode = document.getElementById('htmlCode').value;
-      const cssCode = document.getElementById('cssCode').value;
-      const jsCode = document.getElementById('jsCode').value;
+  function run(){ saveCurrent(); const src = buildHTML(); preview.srcdoc = src; clearLog(); writeLog('Preview loaded ✅','ok'); }
+  function stop(){ preview.srcdoc = '<!doctype html><meta charset="utf-8"><style>body{font:14px system-ui;padding:20px}</style><body>⏹ Preview stopped.</body>'; }
 
-      generatedHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Editor Output</title>
-    <style>${cssCode}</style>
-</head>
-<body>
-    ${htmlCode}
-    <script>${jsCode}<\/script>
-</body>
-</html>`;
+  window.addEventListener('message', (e)=>{
+    const {type,args} = e.data||{}; if(!type) return;
+    if(type.startsWith('console:')){ const level=type.split(':')[1]; writeLog(String(args.map(a=>formatArg(a)).join(' ')), level==='warn'?'warn':level==='error'?'err':'ok'); }
+    if(type==='error'){ writeLog(String(args[0]), 'err'); }
+  });
 
-      const iframe = document.getElementById('previewFrame');
-      iframe.srcdoc = generatedHTML;
-      
-      showToast('Code executed successfully!', 'success');
-    }
+  function formatArg(a){ try{ if(typeof a==='object') return JSON.stringify(a,null,2); }catch{} return String(a); }
+  function writeLog(msg, cls){ const row=document.createElement('div'); row.className='row '+(cls||''); row.textContent=msg; logEl.prepend(row); }
+  function clearLog(){ logEl.innerHTML=''; }
 
-    // Update preview
-    function updatePreview() {
-      if (document.getElementById('htmlCode').value.trim() || 
-          document.getElementById('cssCode').value.trim() || 
-          document.getElementById('jsCode').value.trim()) {
-        runCode();
-      }
-    }
+  // --- Persistence ---
+  let persistTimer=null;
+  function persistSoon(){ clearTimeout(persistTimer); persistTimer=setTimeout(persistNow, 600); }
+  function persistNow(inform){ localStorage.setItem('proCodeStudioProject', JSON.stringify({...project, active: current})); if(inform) writeLog('Đã lưu dự án vào LocalStorage','ok'); }
+  function load(){ try{ const s=localStorage.getItem('proCodeStudioProject'); return s?JSON.parse(s):null; }catch{return null;}
+  }
 
-    // Extract code
-    function extractCode() {
-      const htmlContent = document.getElementById('htmlCode').value;
-      if (!htmlContent.trim()) {
-        showToast('Please enter HTML content first!', 'error');
-        return;
-      }
+  // --- Controls ---
+  document.getElementById('runBtn').onclick=run;
+  document.getElementById('stopBtn').onclick=stop;
+  document.getElementById('clearLog').onclick=clearLog;
+  document.getElementById('downloadBtn').onclick=downloadIndex;
+  document.getElementById('exportBtn').onclick=exportProject;
+  document.getElementById('importBtn').onclick=()=>document.getElementById('fileInput').click();
+  document.getElementById('fileInput').addEventListener('change', importProject);
+  document.getElementById('newBtn').onclick=()=>{ if(confirm('Tạo dự án mới? Nội dung hiện tại sẽ được thay bằng mẫu.')){ project=JSON.parse(JSON.stringify(DEFAULT_PROJECT)); current=project.active; renderTabs(); loadEditor(); persistNow(true); }}
 
-      try {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlContent, 'text/html');
-        
-        let extractedCSS = '';
-        let extractedJS = '';
+  const appEl=document.getElementById('app');
+  document.getElementById('themeToggle').onclick=()=>{
+    const next = appEl.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    appEl.setAttribute('data-theme', next); persistNow();
+  };
 
-        // Extract CSS
-        doc.querySelectorAll('style').forEach(style => {
-          extractedCSS += style.textContent + '\n';
-          style.remove();
-        });
+  // --- Resizer ---
+  const resizer=document.getElementById('resizer'); let startX=0; let startGrid='';
+  resizer.addEventListener('mousedown', (e)=>{ startX=e.clientX; startGrid=getComputedStyle(document.querySelector('.work')).gridTemplateColumns; document.body.style.cursor='col-resize'; window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', stopDrag); });
+  function onDrag(e){ const dx=e.clientX-startX; const [a, , c] = getComputedStyle(document.querySelector('.work')).gridTemplateColumns.split(' ');
+    const left = Math.max(280, parseFloat(a) + dx); const right = Math.max(280, parseFloat(c) - dx);
+    document.querySelector('.work').style.gridTemplateColumns = left+'px 8px '+right+'px'; }
+  function stopDrag(){ document.body.style.cursor=''; window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', stopDrag); }
 
-        // Extract JS
-        doc.querySelectorAll('script').forEach(script => {
-          extractedJS += script.textContent + '\n';
-          script.remove();
-        });
+  // --- Export/Import/Download ---
+  function exportProject(){ saveCurrent(); const blob=new Blob([JSON.stringify({...project, active:current}, null, 2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='project.json'; a.click(); URL.revokeObjectURL(a.href); }
+  function importProject(ev){ const f=ev.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(reader.result); if(!data.files) throw new Error('Không hợp lệ'); project=data; current=data.active||Object.keys(data.files)[0]; renderTabs(); loadEditor(); persistNow(true); }catch(err){ alert('File không hợp lệ'); } }; reader.readAsText(f); ev.target.value=''; }
+  function downloadIndex(){ saveCurrent(); const html = buildStandaloneIndex(); const blob=new Blob([html],{type:'text/html'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click(); URL.revokeObjectURL(a.href); }
+  function buildStandaloneIndex(){
+    const html = project.files['index.html']||''; const css=project.files['style.css']||''; const js=project.files['app.js']||'';
+    return `<!doctype html>\n<html lang=\"vi\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Exported — Pro Code Studio</title><style>${css.replace(/<\\\//g,'<\\\\/')}</style></head><body>${html.replace(/<\\\/(script)/g,'<\\\\/$1')}<script>${js.replace(/<\\\//g,'<\\\\/')}<\\/script></body></html>`;
+  }
 
-        // Update editors
-        if (extractedCSS.trim()) {
-          document.getElementById('cssCode').value = extractedCSS.trim();
-        }
-        if (extractedJS.trim()) {
-          document.getElementById('jsCode').value = extractedJS.trim();
-        }
-        document.getElementById('htmlCode').value = doc.body.innerHTML.trim();
+  // --- Helpers ---
+  function placeCaretAtEnd(el){ el.focus(); const r=document.createRange(); r.selectNodeContents(el); r.collapse(false); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+  function toast(msg){ writeLog(msg,'ok'); }
 
-        showToast('CSS and JS extracted successfully!', 'success');
-        updatePreview();
-      } catch (error) {
-        showToast('Error extracting code', 'error');
-      }
-    }
-
-    // Format code
-    function formatCode() {
-      const htmlCode = document.getElementById('htmlCode').value;
-      const cssCode = document.getElementById('cssCode').value;
-      const jsCode = document.getElementById('jsCode').value;
-
-      // Basic formatting
-      const formattedHTML = htmlCode.replace(/>\s+</g, '>\n<').trim();
-      const formattedCSS = cssCode.replace(/;\s*/g, ';\n  ').replace(/\{\s*/g, ' {\n  ').replace(/\s*\}\s*/g, '\n}\n').trim();
-      const formattedJS = jsCode.replace(/;\s*/g, ';\n').replace(/\{\s*/g, ' {\n').replace(/\s*\}\s*/g, '\n}\n').trim();
-
-      document.getElementById('htmlCode').value = formattedHTML;
-      document.getElementById('cssCode').value = formattedCSS;
-      document.getElementById('jsCode').value = formattedJS;
-
-      showToast('Code formatted!', 'success');
-    }
-
-    // Download functions
-    function downloadHTML() {
-      if (!generatedHTML) {
-        showToast('Please run the code first!', 'error');
-        return;
-      }
-      downloadFile(generatedHTML, 'index.html', 'text/html');
-    }
-
-    function downloadCSS() {
-      const cssCode = document.getElementById('cssCode').value;
-      if (!cssCode.trim()) {
-        showToast('No CSS content!', 'error');
-        return;
-      }
-      downloadFile(cssCode, 'styles.css', 'text/css');
-    }
-
-    function downloadJS() {
-      const jsCode = document.getElementById('jsCode').value;
-      if (!jsCode.trim()) {
-        showToast('No JavaScript content!', 'error');
-        return;
-      }
-      downloadFile(jsCode, 'script.js', 'text/javascript');
-    }
-
-    function downloadFile(content, filename, mimeType) {
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast(`Downloaded ${filename}!`, 'success');
-    }
-
-    function openInNewTab() {
-      if (!generatedHTML) {
-        showToast('Please run the code first!', 'error');
-        return;
-      }
-      const blob = new Blob([generatedHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-    }
-
-    // Load sample code
-    function loadSampleCode() {
-      document.getElementById('htmlCode').value = `<div class="container">
-  <h1>Hello World! 👋</h1>
-  <p>Welcome to the Simple Code Editor</p>
-  <button id="demoBtn">Click me!</button>
-</div>`;
-
-      document.getElementById('cssCode').value = `body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.container {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  text-align: center;
-}
-
-h1 {
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-p {
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-button {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: transform 0.3s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-}`;
-
-      document.getElementById('jsCode').value = `document.getElementById('demoBtn').addEventListener('click', function() {
-  this.textContent = 'Thanks for clicking! 🎉';
-  this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-  
-  setTimeout(() => {
-    this.textContent = 'Click me!';
-    this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-  }, 2000);
-});`;
-
-      updatePreview();
-    }
-
-    // Toast notification
-    function showToast(message, type = 'success') {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.textContent = message;
-      
-      const container = document.getElementById('toastContainer');
-      container.appendChild(toast);
-      
-      setTimeout(() => toast.classList.add('show'), 100);
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => container.removeChild(toast), 300);
-      }, 3000);
-    }
+  // --- Init ---
+  renderTabs(); loadEditor(); run();
   </script>
 </body>
 </html>
