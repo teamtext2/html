@@ -227,12 +227,30 @@
   codeEl.addEventListener('input', () => { saveCurrent(); syncLines(); highlight(); persistSoon(); });
   codeEl.addEventListener('scroll', () => { document.querySelector('.gutter').scrollTop = codeEl.scrollTop; });
   codeEl.addEventListener('keydown', (e)=>{
+    // Allow IME composition to work properly
+    if (e.isComposing || e.keyCode === 229) {
+      return;
+    }
+    
     if(e.key==='Tab'){ e.preventDefault(); insertText('  '); }
     if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); persistNow(true); toast('Đã lưu vào trình duyệt'); }
     if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); run(); }
     if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); toggleSearch(true); }
     if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='h'){ e.preventDefault(); toggleSearch(true); replaceInput.focus(); }
     if((e.ctrlKey||e.metaKey) && e.key==='/'){ e.preventDefault(); toggleComment(); }
+  });
+
+  // Add composition events to handle IME properly
+  codeEl.addEventListener('compositionstart', () => {
+    // IME composition started
+  });
+  
+  codeEl.addEventListener('compositionend', () => {
+    // IME composition ended, update content
+    saveCurrent(); 
+    syncLines(); 
+    highlight(); 
+    persistSoon();
   });
 
   function insertText(text){
