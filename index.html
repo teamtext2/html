@@ -1,9 +1,31 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text2 HTML VIEWR</title>
+  <title>Text2 - READ HTML</title>
+  <link rel="canonical" href="https://html.text2.click">
+  <link rel="icon" href="https://html.text2.click/favicon.ico">
+  <link rel="shortcut icon" href="https://html.text2.click/favicon.ico">
+  <link rel="apple-touch-icon" href="https://html.text2.click/favicon.ico">
+  <meta name="description" content="Text2 - READ HTML: Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="Text2 - READ HTML">
+  <meta name="theme-color" content="#121212">
+  <link rel="alternate" hreflang="en" href="https://html.text2.click">
+  <link rel="alternate" hreflang="x-default" href="https://html.text2.click">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Text2 - READ HTML">
+  <meta property="og:description" content="Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
+  <meta property="og:url" content="https://html.text2.click">
+  <meta property="og:site_name" content="Text2 - READ HTML">
+  <meta property="og:image" content="https://html.text2.click/favicon.ico">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Text2 - READ HTML">
+  <meta name="twitter:description" content="Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
+  <meta name="twitter:image" content="https://html.text2.click/favicon.ico">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
   <style>
     body {
@@ -97,8 +119,41 @@
       overflow: hidden;
       border: 1px solid #242424;
     }
-    textarea {
+    
+    .editor-container {
       width: 50%;
+      height: 100%;
+      display: flex;
+      border-right: 2px solid #242424;
+      background: #1E1E1E;
+    }
+    
+    .line-numbers {
+      width: 50px;
+      height: 100%;
+      background: #2A2A2A;
+      color: #666666;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 14px;
+      padding: 20px 10px;
+      text-align: right;
+      border-right: 1px solid #333333;
+      overflow-y: hidden;
+      user-select: none;
+    }
+    
+    .line-number {
+      line-height: 1.5;
+      padding: 0 5px;
+    }
+    
+    .line-number.active {
+      color: #1E90FF;
+      font-weight: bold;
+    }
+    
+    textarea {
+      flex: 1;
       height: 100%;
       padding: 20px;
       font-family: 'Fira Code', 'Consolas', monospace;
@@ -106,9 +161,9 @@
       border: none;
       outline: none;
       resize: none;
-      border-right: 2px solid #242424;
       background: #1E1E1E;
       color: #FFFFFF;
+      line-height: 1.5;
     }
     textarea::placeholder {
       color: #CCCCCC;
@@ -140,7 +195,7 @@
 <body>
   <header>
     <div class="logo">
-      <img src="https://text2.click/favicon.ico" alt="text2">
+      <img src="https://html.text2.click/favicon.ico" alt="text2">
     </div>
     <label for="fileInput">Import</label>
     <input type="file" id="fileInput" accept=".html,.htm">
@@ -151,7 +206,10 @@
   </header>
 
   <main>
-    <textarea id="editor" placeholder="Nhập code HTML tại đây..."></textarea>
+    <div class="editor-container">
+      <div class="line-numbers"></div>
+      <textarea id="editor" placeholder="Enter HTML code here..."></textarea>
+    </div>
     <iframe id="preview"></iframe>
   </main>
 
@@ -159,6 +217,7 @@
     const editor = document.getElementById('editor');
     const preview = document.getElementById('preview');
     const fileInput = document.getElementById('fileInput');
+    const lineNumbers = document.querySelector('.line-numbers');
 
     // Auto preview (debounce)
     let timer;
@@ -166,8 +225,23 @@
       clearTimeout(timer);
       timer = setTimeout(() => {
         preview.srcdoc = editor.value;
+        updateLineNumbers();
       }, 300);
     });
+
+    // Update line numbers
+    function updateLineNumbers() {
+      const lines = editor.value.split('\n');
+      const lineCount = lines.length;
+      lineNumbers.innerHTML = '';
+      
+      for (let i = 1; i <= lineCount; i++) {
+        const lineNumber = document.createElement('div');
+        lineNumber.className = 'line-number';
+        lineNumber.textContent = i;
+        lineNumbers.appendChild(lineNumber);
+      }
+    }
 
     // Import file
     fileInput.addEventListener('change', (e) => {
@@ -177,6 +251,7 @@
         reader.onload = (evt) => {
           editor.value = evt.target.result;
           preview.srcdoc = editor.value;
+          updateLineNumbers();
         };
         reader.readAsText(file);
       }
@@ -186,6 +261,7 @@
     function clearEditor() {
       editor.value = '';
       preview.srcdoc = '';
+      updateLineNumbers();
     }
 
     // Save file
@@ -214,7 +290,38 @@
         wrap_line_length: 80
       });
       preview.srcdoc = editor.value;
+      updateLineNumbers();
     }
+
+    // Initialize line numbers on page load
+    updateLineNumbers();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Text2 - READ HTML",
+        "url": "https://html.text2.click",
+        "description": "Online HTML editor with live preview. Edit, format, import, and run HTML instantly.",
+        "inLanguage": "en",
+        "publisher": {
+          "@id": "https://text2.click#org"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://text2.click#org",
+        "name": "Text2",
+        "url": "https://text2.click",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://html.text2.click/favicon.ico"
+        }
+      }
+    ]
+  }
   </script>
 </body>
 </html>
