@@ -1,379 +1,144 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pro Code Studio — Single‑File Web IDE</title>
-  <meta name="description" content="A professional, single-file web code editor with HTML/CSS/JS tabs, live preview, console, autosave, theme, and export/import." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text2 HTML Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
   <style>
-    :root{
-      --bg:#0f1220; --panel:#14182b; --muted:#8a91b4; --text:#f4f6ff; --accent:#6ee7ff; --accent-2:#a78bfa; --danger:#ff6b6b; --ok:#34d399; --warn:#fbbf24; --border:#232847;
-      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-    [data-theme="light"]{ --bg:#fafafa; --panel:#ffffff; --muted:#6b7280; --text:#0b1020; --accent:#2563eb; --accent-2:#7c3aed; --danger:#dc2626; --ok:#059669; --warn:#d97706; --border:#e5e7eb; }
-    *{ box-sizing: border-box; }
-    html,body{ height:100%; }
-    body{ margin:0; background:linear-gradient(180deg,var(--bg),#0b0e1a 60%); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"; }
-    .app{ display:grid; grid-template-rows: 56px 1fr 180px; height:100%; }
-    header{ display:flex; align-items:center; gap:10px; padding:10px 12px; background:rgba(20,24,43,.8); border-bottom:1px solid var(--border); backdrop-filter:saturate(140%) blur(6px); position:sticky; top:0; z-index:10; }
-    .badge{ font-weight:700; letter-spacing:.4px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .title{ font-size:14px; opacity:.9; }
-    .spacer{ flex:1; }
-    button, .btn{ 
-      appearance:none; border:1px solid var(--border); color:var(--text); background:linear-gradient(180deg, var(--panel), rgba(255,255,255,0.02));
-      padding:8px 12px; border-radius:12px; font-weight:600; font-size:13px; cursor:pointer; transition:.2s ease; box-shadow:0 0 0 0 rgba(0,0,0,0);
+    header {
+      background: #222;
+      color: #fff;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    button:hover{ transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,0,0,.25); }
-    button.primary{ border-color:transparent; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#0b1020; }
-    button.ghost{ background:transparent; }
-    .toggle{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); }
-
-    /* Main work area */
-    .work{ display:grid; grid-template-columns: 1.1fr 8px 1fr; min-height:0; }
-    .resizer{ background:var(--border); cursor:col-resize; }
-    .left, .right{ min-height:0; }
-
-    /* Tabs + editors */
-    .tabs{ display:flex; gap:6px; padding:10px; border-bottom:1px solid var(--border); background:var(--panel); position:sticky; top:0; z-index:5; }
-    .tab{ padding:8px 12px; border-radius:10px; border:1px solid var(--border); font-weight:600; font-size:13px; background:rgba(255,255,255,0.02); cursor:pointer; }
-    .tab.active{ background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); outline:2px solid transparent; }
-    .editor-wrap{ position:relative; height:100%; }
-
-    /* Editor */
-    .editor{ height:100%; width:100%; display:grid; grid-template-columns: 48px 1fr; background:radial-gradient(60% 80% at 20% 20%, rgba(111,114,255,0.08), transparent 60%); }
-    .gutter{ border-right:1px solid var(--border); color:var(--muted); padding:10px 6px; overflow:auto; }
-    .code{ padding:10px 14px; font: 13px/1.6 var(--font); color:var(--text); overflow:auto; }
-    .code[contenteditable="true"]{ outline:none; white-space:pre; }
-
-    /* Line numbers */
-    .gutter ol{ list-style:none; margin:0; padding:0; counter-reset:line; }
-    .gutter li{ counter-increment:line; padding:0 6px; height:21px; line-height:21px; }
-    .gutter li::before{ content:counter(line); opacity:.6; }
-
-    /* Preview */
-    .right{ display:grid; grid-template-rows: 44px 1fr; border-left:1px solid var(--border); background:var(--panel); }
-    .right .bar{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-bottom:1px solid var(--border); }
-    iframe{ width:100%; height:100%; border:0; background:#fff; }
-
-    /* Console */
-    .console{ border-top:1px solid var(--border); background:var(--panel); display:grid; grid-template-rows: 36px 1fr; }
-    .console .bar{ display:flex; align-items:center; gap:10px; padding:6px 10px; border-bottom:1px solid var(--border); }
-    .log{ padding:8px 12px; overflow:auto; font: 12px/1.5 var(--font); }
-    .log .row{ padding:6px 8px; border-bottom:1px dashed var(--border); white-space:pre-wrap; word-break:break-word; }
-    .log .row.ok{ color:var(--ok); }
-    .log .row.warn{ color:var(--warn); }
-    .log .row.err{ color:var(--danger); }
-
-    /* Search */
-    .searchbox{ display:none; position:absolute; top:10px; right:10px; gap:6px; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
-    .searchbox.show{ display:flex; }
-    .searchbox input{ background:transparent; border:0; outline:0; color:var(--text); font: 12px var(--font); }
-
-    /* Small tweaks */
-    .hint{ color:var(--muted); font-size:12px; }
-    .kbd{ padding:2px 6px; border:1px solid var(--border); border-radius:6px; font:12px var(--font); }
-    .hidden{ display:none !important; }
-    .float-right{ margin-left:auto; }
-
-    @media (max-width: 980px){ .work{ grid-template-columns: 1fr; } .resizer{ display:none; } }
+    header .logo {
+      font-weight: bold;
+      font-size: 18px;
+      color: #00e676;
+      margin-right: 20px;
+    }
+    header button, header label {
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    header button:hover, header label:hover {
+      background: #666;
+    }
+    header input[type="file"] {
+      display: none;
+    }
+    main {
+      flex: 1;
+      display: flex;
+    }
+    textarea {
+      width: 50%;
+      height: 100%;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border: none;
+      outline: none;
+      resize: none;
+      border-right: 2px solid #ccc;
+    }
+    iframe {
+      width: 50%;
+      height: 100%;
+      border: none;
+    }
   </style>
 </head>
 <body>
-  <div class="app" id="app" data-theme="dark">
-    <header>
-      <div class="badge">Pro Code Studio</div>
-      <div class="title">Single‑file Web IDE</div>
-      <div class="spacer"></div>
-      <div class="toggle" id="themeToggle" role="button" title="Đổi theme (Dark/Light)">🌙<span class="hint">Theme</span></div>
-      <button class="ghost" id="newBtn" title="Tạo mới (Alt+N)">Mới</button>
-      <button id="importBtn" class="ghost" title="Nhập dự án (.json)">Nhập</button>
-      <button id="exportBtn" class="ghost" title="Xuất dự án (.json)">Xuất</button>
-      <button id="downloadBtn" class="ghost" title="Tải xuống index.html">Tải xuống</button>
-      <button class="primary" id="runBtn" title="Chạy (Ctrl/⌘ + Enter)">Chạy</button>
-      <button id="stopBtn" title="Dừng preview">Dừng</button>
-      <input id="fileInput" type="file" accept="application/json" class="hidden" />
-    </header>
+  <header>
+    <div class="logo">text2</div>
+    <label for="fileInput">Import</label>
+    <input type="file" id="fileInput" accept=".html,.htm">
+    <button onclick="clearEditor()">Clear</button>
+    <button onclick="saveFile()">Save</button>
+    <button onclick="openInNewTab()">Run</button>
+    <button onclick="formatCode()">Format</button>
+  </header>
 
-    <main class="work">
-      <section class="left">
-        <nav class="tabs" id="tabs"></nav>
-        <div class="editor-wrap">
-          <div class="searchbox" id="searchBox">
-            <input id="searchInput" placeholder="Tìm (Ctrl+F)" />
-            <input id="replaceInput" placeholder="Thay (Ctrl+H)" />
-            <button id="prevBtn">⬆</button>
-            <button id="nextBtn">⬇</button>
-            <button id="replaceOneBtn">Thay</button>
-            <button id="replaceAllBtn">Thay tất</button>
-            <button id="closeSearch">✕</button>
-          </div>
-          <div class="editor" id="editor">
-            <div class="gutter"><ol id="lines"></ol></div>
-            <pre class="code" id="code" contenteditable="true" spellcheck="false"></pre>
-          </div>
-        </div>
-      </section>
-      <div class="resizer" id="resizer" title="Kéo để thay đổi kích thước"></div>
-      <section class="right">
-        <div class="bar">
-          <span class="hint">Live Preview</span>
-          <span class="hint">| Sandbox</span>
-          <span class="hint float-right">Tip: <span class="kbd">Ctrl/⌘</span> + <span class="kbd">Enter</span> để chạy • <span class="kbd">Ctrl/⌘</span> + <span class="kbd">S</span> để lưu</span>
-        </div>
-        <iframe id="preview" sandbox="allow-scripts allow-same-origin" title="Preview"></iframe>
-      </section>
-    </main>
-
-    <section class="console">
-      <div class="bar">
-        <strong>Console</strong>
-        <button id="clearLog" class="ghost">Xoá</button>
-      </div>
-      <div class="log" id="log"></div>
-    </section>
-  </div>
+  <main>
+    <textarea id="editor" placeholder="Nhập code HTML tại đây..."></textarea>
+    <iframe id="preview"></iframe>
+  </main>
 
   <script>
-  // --- Core state ---
-  const DEFAULT_PROJECT = {
-    active: 'index.html',
-    files: {
-      'index.html': `<!doctype html>\n<html lang="vi">\n<head>\n  <meta charset="utf-8"/>\n  <meta name="viewport" content="width=device-width, initial-scale=1"/>\n  <title>Xin chào Pro Code Studio</title>\n  <style>\n    body{font:16px system-ui; margin:40px; line-height:1.6;}\n    h1{color:#2563eb;}\n    .card{border:1px solid #e5e7eb; border-radius:16px; padding:20px; box-shadow:0 6px 20px rgba(0,0,0,.06);}\n  </style>\n</head>\n<body>\n  <h1>👋 Hello, thế giới!</h1>\n  <p>Bạn đang ở tab <code>index.html</code>. Hãy mở các tab <strong>style.css</strong> và <strong>app.js</strong> để tiếp tục.</p>\n  <div class="card">Sửa nội dung này và nhấn <kbd>Ctrl/⌘</kbd> + <kbd>Enter</kbd> để xem preview bên phải.</div>\n</body>\n</html>` ,
-      'style.css': `:root{--c:#7c3aed;}\nbody{font:16px system-ui;margin:0} .hero{padding:48px;text-align:center;background:linear-gradient(90deg,#2563eb22,#7c3aed22)} h1{color:var(--c)}`,
-      'app.js': `console.log('Xin chào từ app.js!');\n\n// Ví dụ nhỏ: DOM ready\ndocument.addEventListener('DOMContentLoaded',()=>{\n  const el=document.createElement('div');\n  el.textContent='JavaScript đã sẵn sàng ✨';\n  el.style.cssText='position:fixed;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:#000000aa;color:#fff;font:12px ui-monospace';\n  document.body.appendChild(el);\n  setTimeout(()=>el.remove(),2200);\n});`
-    }
-  };
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+    const fileInput = document.getElementById('fileInput');
 
-  let project = load() || DEFAULT_PROJECT;
-  let current = project.active;
-
-  // --- Elements ---
-  const tabsEl = document.getElementById('tabs');
-  const codeEl = document.getElementById('code');
-  const linesEl = document.getElementById('lines');
-  const preview = document.getElementById('preview');
-  const logEl = document.getElementById('log');
-  const searchBox = document.getElementById('searchBox');
-  const searchInput = document.getElementById('searchInput');
-  const replaceInput = document.getElementById('replaceInput');
-
-  // --- UI Build ---
-  function renderTabs(){
-    tabsEl.innerHTML = '';
-    Object.keys(project.files).forEach(name => {
-      const b=document.createElement('button');
-      b.className='tab'+(current===name?' active':'');
-      b.textContent=name;
-      b.onclick=()=>{ saveCurrent(); current=name; renderTabs(); loadEditor(); };
-      b.oncontextmenu=(e)=>{ e.preventDefault(); renameFile(name); };
-      tabsEl.appendChild(b);
+    // Auto preview (debounce)
+    let timer;
+    editor.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        preview.srcdoc = editor.value;
+      }, 300);
     });
-    const addBtn=document.createElement('button');
-    addBtn.className='tab'; addBtn.textContent='＋'; addBtn.title='Thêm file';
-    addBtn.onclick=()=>{ const n=prompt('Tên file (vd: script.js, style.css, about.html):'); if(!n) return; if(project.files[n]) return alert('Đã tồn tại.'); project.files[n]=''; current=n; renderTabs(); loadEditor(); persist(); };
-    tabsEl.appendChild(addBtn);
-  }
 
-  function renameFile(name){
-    const n=prompt('Đổi tên file:', name); if(!n||n===name) return;
-    if(project.files[n]) return alert('Tên đã tồn tại.');
-    project.files[n]=project.files[name]; delete project.files[name];
-    if(current===name) current=n; renderTabs(); loadEditor(); persist();
-  }
+    // Import file
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          editor.value = evt.target.result;
+          preview.srcdoc = editor.value;
+        };
+        reader.readAsText(file);
+      }
+    });
 
-  function loadEditor(){ codeEl.textContent = project.files[current] || ''; syncLines(); placeCaretAtEnd(codeEl); highlight(); }
-  function saveCurrent(){ project.files[current] = codeEl.textContent; }
-
-  function syncLines(){
-    const count = (codeEl.textContent.match(/\n/g)||[]).length + 1;
-    let html=''; for(let i=1;i<=count;i++) html += `<li></li>`;
-    linesEl.innerHTML = html;
-  }
-
-  // --- Simple highlighting (regex based, lightweight) ---
-  function highlight(){
-    // Minimal token coloring using CSS custom spans — not a full parser.
-    const lang = getLang(current);
-    const src = codeEl.textContent;
-    let h = escapeHtml(src);
-    if(lang==='html'){
-      h = h
-        .replace(/(&lt;!--[\s\S]*?--&gt;)/g,'<span style="opacity:.6">$1<\/span>')
-        .replace(/(&lt;\/?)([a-zA-Z0-9-:]+)/g,'$1<span style="color:#6ee7ff">$2<\/span>')
-        .replace(/([a-zA-Z-:]+)=(&quot;.*?&quot;|'.*?')/g,'<span style="color:#a78bfa">$1<\/span>=<span style="color:#34d399">$2<\/span>');
-    } else if(lang==='css'){
-      h = h
-        .replace(/\/\*[\s\S]*?\*\//g,'<span style="opacity:.6">$&<\/span>')
-        .replace(/([^{\s][^{]*?)\s*\{/g,'<span style="color:#6ee7ff">$1<\/span>{')
-        .replace(/(:)\s*([^;\n]+)(;?)/g,'$1 <span style="color:#34d399">$2<\/span>$3');
-    } else { // js
-      h = h
-        .replace(/\/\/[^"]*?$/gm,'<span style="opacity:.6">$&<\/span>')
-        .replace(/("[^"]*"|'[^']*'|`[^`]*`)/g,'<span style="color:#34d399">$1<\/span>')
-        .replace(/\b(const|let|var|function|return|if|else|for|while|class|new|try|catch|await|async|import|from|export|default)\b/g,'<span style="color:#a78bfa">$1<\/span>');
+    // Clear editor
+    function clearEditor() {
+      editor.value = '';
+      preview.srcdoc = '';
     }
-    codeEl.innerHTML = h.replace(/\n/g,'<br/>');
-  }
 
-  function getLang(name){
-    if(name.endsWith('.html')) return 'html';
-    if(name.endsWith('.css')) return 'css';
-    return 'js';
-  }
-
-  function escapeHtml(s){ return s.replace(/[&<>\"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
-
-  // --- Editor behaviors ---
-  codeEl.addEventListener('input', () => { saveCurrent(); syncLines(); highlight(); persistSoon(); });
-  codeEl.addEventListener('scroll', () => { document.querySelector('.gutter').scrollTop = codeEl.scrollTop; });
-  codeEl.addEventListener('keydown', (e)=>{
-    // Allow IME composition to work properly
-    if (e.isComposing || e.keyCode === 229) {
-      return;
+    // Save file
+    function saveFile() {
+      const blob = new Blob([editor.value], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "index.html";
+      a.click();
+      URL.revokeObjectURL(url);
     }
-    
-    if(e.key==='Tab'){ e.preventDefault(); insertText('  '); }
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); persistNow(true); toast('Đã lưu vào trình duyệt'); }
-    if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); run(); }
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); toggleSearch(true); }
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='h'){ e.preventDefault(); toggleSearch(true); replaceInput.focus(); }
-    if((e.ctrlKey||e.metaKey) && e.key==='/'){ e.preventDefault(); toggleComment(); }
-  });
 
-  // Add composition events to handle IME properly
-  codeEl.addEventListener('compositionstart', () => {
-    // IME composition started
-  });
-  
-  codeEl.addEventListener('compositionend', () => {
-    // IME composition ended, update content
-    saveCurrent(); 
-    syncLines(); 
-    highlight(); 
-    persistSoon();
-  });
-
-  function insertText(text){
-    const sel = window.getSelection();
-    if(!sel.rangeCount) return;
-    const range = sel.getRangeAt(0);
-    range.deleteContents();
-    range.insertNode(document.createTextNode(text));
-    range.collapse(false);
-  }
-
-  function toggleComment(){
-    const lang=getLang(current);
-    const sel = window.getSelection(); if(!sel.rangeCount) return;
-    const r = sel.getRangeAt(0);
-    // naive line toggle
-    const start = r.startOffset, end = r.endOffset;
-    const t = codeEl.textContent;
-    let before=t.slice(0,start), mid=t.slice(start,end), after=t.slice(end);
-    if(lang==='html'){
-      if(mid.startsWith('<!--') && mid.endsWith('-->')) mid=mid.slice(4,-3); else mid='<!--'+mid+'-->';
-    } else if(lang==='css'){
-      if(mid.startsWith('/*') && mid.endsWith('*/')) mid=mid.slice(2,-2); else mid='/*'+mid+'*/';
-    } else {
-      if(mid.startsWith('//')) mid=mid.replace(/^\/\//,''); else mid='//'+mid;
+    // Run in new tab
+    function openInNewTab() {
+      const newWindow = window.open();
+      newWindow.document.open();
+      newWindow.document.write(editor.value);
+      newWindow.document.close();
     }
-    codeEl.textContent = before+mid+after; saveCurrent(); syncLines(); highlight();
-  }
 
-  // --- Search & Replace ---
-  let searchIndex = 0; let matches = [];
-  function toggleSearch(show){ searchBox.classList.toggle('show', !!show); if(show){ searchInput.focus(); refreshMatches(); } }
-  function refreshMatches(){
-    const q = searchInput.value;
-    matches = []; searchIndex=0; if(!q) return;
-    const text = codeEl.textContent; let idx=-1; while((idx=text.indexOf(q, idx+1))!==-1) matches.push(idx);
-    jumpToMatch(0);
-  }
-  function jumpToMatch(i){ if(!matches.length) return; searchIndex=(i+matches.length)%matches.length; setCaret(matches[searchIndex]); }
-  function setCaret(pos){
-    const node = codeEl.firstChild; if(!node) return; const range=document.createRange(); const sel=window.getSelection();
-    range.setStart(node, Math.min(pos, node.length||0)); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); codeEl.focus();
-  }
-  document.getElementById('prevBtn').onclick=()=>jumpToMatch(searchIndex-1);
-  document.getElementById('nextBtn').onclick=()=>jumpToMatch(searchIndex+1);
-  document.getElementById('replaceOneBtn').onclick=()=>replaceOnce();
-  document.getElementById('replaceAllBtn').onclick=()=>replaceAll();
-  document.getElementById('closeSearch').onclick=()=>toggleSearch(false);
-  searchInput.oninput=refreshMatches;
-  function replaceOnce(){ if(!matches.length) return; const q=searchInput.value, r=replaceInput.value; const pos=matches[searchIndex]; const t=codeEl.textContent; codeEl.textContent=t.slice(0,pos)+r+t.slice(pos+q.length); saveCurrent(); syncLines(); highlight(); refreshMatches(); }
-  function replaceAll(){ const q=searchInput.value, r=replaceInput.value; codeEl.textContent=codeEl.textContent.split(q).join(r); saveCurrent(); syncLines(); highlight(); refreshMatches(); }
-
-  // --- Preview runner ---
-  function buildHTML(){
-    const html = project.files['index.html'] || '';
-    const css = project.files['style.css'] || '';
-    const js  = project.files['app.js'] || '';
-    const payload = `<!doctype html><html><head><meta charset=\"utf-8\"><style>${css.replace(/<\//g,'<\\/')}</style></head><body>`
-      + html.replace(/<\/(script)/g,'<\\/$1')
-      + `<script>(function(){\n const send=(type,...args)=>parent.postMessage({type, args}, '*');\n ['log','warn','error'].forEach(k=>{const _=console[k].bind(console); console[k]=(...a)=>{send('console:'+k, ...a); _(...a);} });\n window.addEventListener('error',e=>send('error', String(e.message||e.error)));\n try{${js.replace(/<\//g,'<\\/')}}catch(e){send('error', String(e.message||e));}\n})();<\/script>`
-      + `</body></html>`;
-    return payload;
-  }
-
-  function run(){ saveCurrent(); const src = buildHTML(); preview.srcdoc = src; clearLog(); writeLog('Preview loaded ✅','ok'); }
-  function stop(){ preview.srcdoc = '<!doctype html><meta charset="utf-8"><style>body{font:14px system-ui;padding:20px}</style><body>⏹ Preview stopped.</body>'; }
-
-  window.addEventListener('message', (e)=>{
-    const {type,args} = e.data||{}; if(!type) return;
-    if(type.startsWith('console:')){ const level=type.split(':')[1]; writeLog(String(args.map(a=>formatArg(a)).join(' ')), level==='warn'?'warn':level==='error'?'err':'ok'); }
-    if(type==='error'){ writeLog(String(args[0]), 'err'); }
-  });
-
-  function formatArg(a){ try{ if(typeof a==='object') return JSON.stringify(a,null,2); }catch{} return String(a); }
-  function writeLog(msg, cls){ const row=document.createElement('div'); row.className='row '+(cls||''); row.textContent=msg; logEl.prepend(row); }
-  function clearLog(){ logEl.innerHTML=''; }
-
-  // --- Persistence ---
-  let persistTimer=null;
-  function persistSoon(){ clearTimeout(persistTimer); persistTimer=setTimeout(persistNow, 600); }
-  function persistNow(inform){ localStorage.setItem('proCodeStudioProject', JSON.stringify({...project, active: current})); if(inform) writeLog('Đã lưu dự án vào LocalStorage','ok'); }
-  function load(){ try{ const s=localStorage.getItem('proCodeStudioProject'); return s?JSON.parse(s):null; }catch{return null;}
-  }
-
-  // --- Controls ---
-  document.getElementById('runBtn').onclick=run;
-  document.getElementById('stopBtn').onclick=stop;
-  document.getElementById('clearLog').onclick=clearLog;
-  document.getElementById('downloadBtn').onclick=downloadIndex;
-  document.getElementById('exportBtn').onclick=exportProject;
-  document.getElementById('importBtn').onclick=()=>document.getElementById('fileInput').click();
-  document.getElementById('fileInput').addEventListener('change', importProject);
-  document.getElementById('newBtn').onclick=()=>{ if(confirm('Tạo dự án mới? Nội dung hiện tại sẽ được thay bằng mẫu.')){ project=JSON.parse(JSON.stringify(DEFAULT_PROJECT)); current=project.active; renderTabs(); loadEditor(); persistNow(true); }}
-
-  const appEl=document.getElementById('app');
-  document.getElementById('themeToggle').onclick=()=>{
-    const next = appEl.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
-    appEl.setAttribute('data-theme', next); persistNow();
-  };
-
-  // --- Resizer ---
-  const resizer=document.getElementById('resizer'); let startX=0; let startGrid='';
-  resizer.addEventListener('mousedown', (e)=>{ startX=e.clientX; startGrid=getComputedStyle(document.querySelector('.work')).gridTemplateColumns; document.body.style.cursor='col-resize'; window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', stopDrag); });
-  function onDrag(e){ const dx=e.clientX-startX; const [a, , c] = getComputedStyle(document.querySelector('.work')).gridTemplateColumns.split(' ');
-    const left = Math.max(280, parseFloat(a) + dx); const right = Math.max(280, parseFloat(c) - dx);
-    document.querySelector('.work').style.gridTemplateColumns = left+'px 8px '+right+'px'; }
-  function stopDrag(){ document.body.style.cursor=''; window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', stopDrag); }
-
-  // --- Export/Import/Download ---
-  function exportProject(){ saveCurrent(); const blob=new Blob([JSON.stringify({...project, active:current}, null, 2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='project.json'; a.click(); URL.revokeObjectURL(a.href); }
-  function importProject(ev){ const f=ev.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(reader.result); if(!data.files) throw new Error('Không hợp lệ'); project=data; current=data.active||Object.keys(data.files)[0]; renderTabs(); loadEditor(); persistNow(true); }catch(err){ alert('File không hợp lệ'); } }; reader.readAsText(f); ev.target.value=''; }
-  function downloadIndex(){ saveCurrent(); const html = buildStandaloneIndex(); const blob=new Blob([html],{type:'text/html'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click(); URL.revokeObjectURL(a.href); }
-  function buildStandaloneIndex(){
-    const html = project.files['index.html']||''; const css=project.files['style.css']||''; const js=project.files['app.js']||'';
-    return `<!doctype html>\n<html lang=\"vi\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Exported — Pro Code Studio</title><style>${css.replace(/<\\\//g,'<\\\\/')}</style></head><body>${html.replace(/<\\\/(script)/g,'<\\\\/$1')}<script>${js.replace(/<\\\//g,'<\\\\/')}<\\/script></body></html>`;
-  }
-
-  // --- Helpers ---
-  function placeCaretAtEnd(el){ el.focus(); const r=document.createRange(); r.selectNodeContents(el); r.collapse(false); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-  function toast(msg){ writeLog(msg,'ok'); }
-
-  // --- Init ---
-  renderTabs(); loadEditor(); run();
+    // Format code
+    function formatCode() {
+      editor.value = html_beautify(editor.value, {
+        indent_size: 2,
+        wrap_line_length: 80
+      });
+      preview.srcdoc = editor.value;
+    }
   </script>
 </body>
 </html>
