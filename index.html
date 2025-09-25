@@ -36,33 +36,69 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      background: linear-gradient(135deg, #121212, #1E1E1E);
-      color: #FFFFFF;
+      background: linear-gradient(135deg, #f5f5f5, #ffffff);
+      color: #333333;
       transition: background 0.3s ease;
+      /* Force desktop layout on all devices */
+      min-width: 1024px;
+      overflow-x: auto;
     }
+    
+    /* Force desktop layout on mobile */
+    @media screen and (max-width: 768px) {
+      body {
+        min-width: 1024px;
+        overflow-x: auto;
+      }
+      
+      main {
+        min-width: 980px;
+      }
+      
+      .editor-container {
+        width: 50% !important;
+        min-width: 490px;
+      }
+      
+      iframe {
+        width: 50% !important;
+        min-width: 490px;
+      }
+      
+      header {
+        min-width: 1024px;
+        flex-wrap: nowrap;
+      }
+      
+      header button, header label {
+        white-space: nowrap;
+        min-width: auto;
+      }
+    }
+    
     header {
-      background: #1E1E1E;
-      color: #FFFFFF;
+      background: #ffffff;
+      color: #333333;
       padding: 15px 20px;
       display: flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid #242424;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #e0e0e0;
       transition: box-shadow 0.3s ease;
     }
     header:hover {
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
     }
     header .logo {
       font-weight: 700;
       font-size: 22px;
-      background: linear-gradient(45deg, #91c8ff, #96b0ff);
+      background: linear-gradient(45deg, #1976d2, #42a5f5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-right: 30px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -72,33 +108,33 @@
       width: auto;
       vertical-align: middle;
       border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
     header button, header label {
-      background: #242424;
-      color: #FFFFFF;
-      border: 1px solid #333333;
+      background: #f5f5f5;
+      color: #333333;
+      border: 1px solid #d0d0d0;
       padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       font-size: 14px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       position: relative;
       overflow: hidden;
     }
     header button:hover, header label:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(30, 144, 255, 0.3);
+      box-shadow: 0 6px 20px rgba(30, 144, 255, 0.2);
       background: #1E90FF;
       border-color: #1E90FF;
-      color: #FFFFFF;
+      color: #ffffff;
     }
     header button:active, header label:active {
       transform: translateY(0);
-      box-shadow: 0 2px 10px rgba(30, 144, 255, 0.2);
+      box-shadow: 0 2px 10px rgba(30, 144, 255, 0.15);
     }
     header input[type="file"] {
       display: none;
@@ -106,37 +142,37 @@
     main {
       flex: 1;
       display: flex;
-      background: #1A1A1A;
+      background: #ffffff;
       margin: 20px;
       border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      border: 1px solid #242424;
+      border: 1px solid #e0e0e0;
       transition: box-shadow 0.3s ease;
     }
 
     main:hover {
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     }
 
     .editor-container {
       width: 50%;
       height: 100%;
       display: flex;
-      border-right: 2px solid #242424;
-      background: #1E1E1E;
+      border-right: 2px solid #e0e0e0;
+      background: #ffffff;
     }
 
     .line-numbers {
       width: 50px;
       height: 100%;
-      background: #2A2A2A;
-      color: #666666;
+      background: #f8f8f8;
+      color: #888888;
       font-family: 'Fira Code', 'Consolas', monospace;
       font-size: 14px;
       padding: 20px 10px;
       text-align: right;
-      border-right: 1px solid #333333;
+      border-right: 1px solid #e0e0e0;
       overflow-y: hidden;
       user-select: none;
     }
@@ -160,21 +196,21 @@
       border: none;
       outline: none;
       resize: none;
-      background: #1E1E1E;
-      color: #FFFFFF;
+      background: #ffffff;
+      color: #333333;
       line-height: 1.5;
       transition: background 0.3s ease;
     }
 
     textarea:focus {
-      background: #242424;
+      background: #fafafa;
     }
 
     iframe {
       width: 50%;
       height: 100%;
       border: none;
-      background: #1E1E1E;
+      background: #ffffff;
     }
 
     /* Style for preview content */
@@ -182,7 +218,7 @@
       width: 50%;
       height: 100%;
       border: none;
-      background: #1E1E1E;
+      background: #ffffff;
     }
 
     /* Inject CSS to make text white in preview */
@@ -190,7 +226,7 @@
       width: 50%;
       height: 100%;
       border: none;
-      background: #757575;
+      background: #f9f9f9;
     }
   </style>
 </head>
