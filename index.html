@@ -3,442 +3,276 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text2 - READ HTML</title>
+  <title>Text2 HTML - Super Fast Editor & Live Preview</title>
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="Online HTML reader and editor with super fast live preview. Optimized for all devices, supports import, format, and instant HTML code execution.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="Text2, HTML reader, HTML editor, live preview, code editor, HTML reader, HTML editing">
+  <meta name="theme-color" content="#ffffff">
   <link rel="canonical" href="https://html.text2.click">
+  <link rel="alternate" hreflang="vi" href="https://html.text2.click">
+  <link rel="alternate" hreflang="en" href="https://html.text2.click">
+  <link rel="alternate" hreflang="x-default" href="https://html.text2.click">
+  
+  <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <meta name="description" content="Text2 - READ HTML: Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
-  <meta name="robots" content="index, follow">
-  <meta name="keywords" content="Text2 - READ HTML">
-  <meta name="theme-color" content="#121212">
-  <link rel="alternate" hreflang="en" href="https://html.text2.click">
-  <link rel="alternate" hreflang="x-default" href="https://html.text2.click">
-
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Text2 - READ HTML">
-  <meta property="og:description" content="Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
+  <meta property="og:title" content="Text2 HTML - Super Fast Editor & Live Preview">
+  <meta property="og:description" content="Online HTML reader and editor with super fast live preview. Optimized for all devices, supports import, format, and instant HTML code execution.">
   <meta property="og:url" content="https://html.text2.click">
-  <meta property="og:site_name" content="Text2 - READ HTML">
-  <meta property="og:image" content="https://html.text2.click/favicon.ico">
+  <meta property="og:site_name" content="Text2 HTML">
+  <meta property="og:image" content="https://html.text2.click/og-image.png">
 
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Text2 - READ HTML">
-  <meta name="twitter:description" content="Online HTML editor with live preview. Edit, format, import, and run HTML instantly.">
-  <meta name="twitter:image" content="https://html.text2.click/favicon.ico">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Text2 HTML - Super Fast Editor & Live Preview">
+  <meta name="twitter:description" content="Online HTML reader and editor with super fast live preview. Optimized for all devices, supports import, format, and instant HTML code execution.">
+  <meta name="twitter:image" content="https://html.text2.click/og-image.png">
+
+  <!-- Scripts & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
+    /* Custom styles for a polished look */
     body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background: linear-gradient(135deg, #f5f5f5, #ffffff);
-      color: #333333;
-      transition: background 0.3s ease;
-      /* Force desktop layout on all devices */
-      min-width: 1024px;
-      overflow-x: auto;
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6; /* Light gray background */
     }
-
-    /* Force desktop layout on mobile */
-    @media screen and (max-width: 768px) {
-      body {
-        min-width: 1024px;
-        overflow-x: auto;
-      }
-      
-      main {
-        min-width: 980px;
-      }
-      
-      .editor-container {
-        width: 50% !important;
-        min-width: 490px;
-      }
-      
-      iframe {
-        width: 50% !important;
-        min-width: 490px;
-      }
-      
-      header {
-        min-width: 1024px;
-        flex-wrap: nowrap;
-      }
-      
-      header button, header label {
-        white-space: nowrap;
-        min-width: auto;
-      }
-    }
-    
-    header {
-      background: #ffffff;
-      color: #333333;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      border-bottom: 1px solid #e0e0e0;
-      transition: box-shadow 0.3s ease;
-    }
-    header:hover {
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-    }
-    header .logo {
-      font-weight: 700;
-      font-size: 22px;
-      background: linear-gradient(45deg, #1976d2, #42a5f5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-right: 30px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    header .logo img {
-      height: 28px;
-      width: auto;
-      vertical-align: middle;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    }
-    header button, header label {
-      background: #f5f5f5;
-      color: #333333;
-      border: 1px solid #d0d0d0;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      position: relative;
-      overflow: hidden;
-    }
-    header button:hover, header label:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(30, 144, 255, 0.2);
-      background: #1E90FF;
-      border-color: #1E90FF;
-      color: #ffffff;
-    }
-    header button:active, header label:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 10px rgba(30, 144, 255, 0.15);
-    }
-    header input[type="file"] {
-      display: none;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      background: #ffffff;
-      margin: 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      border: 1px solid #e0e0e0;
-      transition: box-shadow 0.3s ease;
-    }
-
-    main:hover {
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .editor-container {
-      width: 50%;
-      height: 100%;
-      display: flex;
-      border-right: 2px solid #e0e0e0;
-      background: #ffffff;
-    }
-
-    .line-numbers {
-      width: 50px;
-      height: 100%;
-      background: #f8f8f8;
-      color: #888888;
-      font-family: 'Fira Code', 'Consolas', monospace;
-      font-size: 14px;
-      padding: 20px 10px;
-      text-align: right;
-      border-right: 1px solid #e0e0e0;
-      overflow-y: hidden;
-      user-select: none;
-    }
-
-    .line-number {
-      line-height: 1.5;
-      padding: 0 5px;
-    }
-
-    .line-number.active {
-      color: #1E90FF;
-      font-weight: bold;
-    }
-
-    textarea {
-      flex: 1;
-      height: 100%;
-      padding: 20px;
+    .editor-textarea {
       font-family: 'Roboto Mono', monospace;
-      font-size: 14px;
-      border: none;
-      outline: none;
-      resize: none;
-      background: #ffffff;
-      color: #333333;
-      line-height: 1.5;
-      transition: background 0.3s ease;
+      color: #111827; /* Dark text color for editor */
+      caret-color: #3b82f6; /* Blue caret */
+      line-height: 1.6;
     }
-
-    textarea:focus {
-      background: #fafafa;
+    /* Custom scrollbar for a modern feel */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-
-    iframe {
-      width: 50%;
-      height: 100%;
-      border: none;
-      background: #ffffff;
+    ::-webkit-scrollbar-track {
+      background: #e5e7eb;
     }
-
-    /* Style for preview content */
-    iframe {
-      width: 50%;
-      height: 100%;
-      border: none;
-      background: #ffffff;
+    ::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 10px;
     }
-
-    /* Inject CSS to make text white in preview */
-    iframe {
-      width: 50%;
-      height: 100%;
-      border: none;
-      background: #f9f9f9;
-    }
-    
-    /* Mobile popup notification styles */
-    .mobile-popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    
-    .mobile-popup-content {
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      position: relative;
-    }
-    
-    .mobile-popup h3 {
-      color: #1976d2;
-      margin: 0 0 15px 0;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    
-    .mobile-popup p {
-      color: #666;
-      margin: 0 0 20px 0;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    
-    .mobile-popup-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    
-    .mobile-popup button {
-      background: #1976d2;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      min-width: 100px;
-    }
-    
-    .mobile-popup button:hover {
-      background: #1565c0;
-      transform: translateY(-1px);
-    }
-    
-    .mobile-popup button.secondary {
-      background: #f5f5f5;
-      color: #666;
-      border: 1px solid #ddd;
-    }
-    
-    .mobile-popup button.secondary:hover {
-      background: #e0e0e0;
-      color: #333;
-    }
-    
-    @media screen and (max-width: 768px) {
-      .mobile-popup {
-        display: flex;
-      }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
     }
   </style>
 </head>
-<body>
-  <!-- Mobile popup notification -->
-  <div class="mobile-popup" id="mobilePopup">
-    <div class="mobile-popup-content">
-      <h3>Notification</h3>
-      <p>Please change your browser to desktop mode to continue using.</p>
-      <p>Bạn vui lòng chỉnh trình duyệt sang chế độ máy tính để có thể tiếp tục sử dụng</p>
-      <div class="mobile-popup-buttons">
-        <button onclick="requestDesktopSite()">Desktop</button>
-        <button class="secondary" onclick="closeMobilePopup()">Next</button>
-      </div>
+
+<body class="bg-gray-100 text-gray-800 flex flex-col h-screen overflow-hidden">
+
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200/80 px-4 py-3 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <img src="https://html.text2.click/favicon.ico" alt="Text2 Logo" class="h-8 w-8 rounded-md shadow-lg">
+      <h1 class="text-xl font-bold tracking-tight text-gray-900 hidden sm:block">Text2 <span class="text-blue-600">HTML</span></h1>
     </div>
-  </div>
-  <header>
-    <div class="logo">
-      <img src="https://html.text2.click/favicon.ico" alt="text2">
+    <div class="flex items-center gap-2">
+      <label for="fileInput" class="cursor-pointer bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center gap-2 border border-gray-200 shadow-sm" title="Import File">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span class="hidden md:inline">Import</span>
+      </label>
+      <input type="file" id="fileInput" accept=".html,.htm" class="hidden">
+      
+      <button id="formatBtn" class="bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center gap-2 border border-gray-200 shadow-sm" title="Format Code">
+         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span class="hidden md:inline">Format</span>
+      </button>
+
+      <button id="clearBtn" class="bg-white hover:bg-gray-50 text-red-600 font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center gap-2 border border-gray-200 shadow-sm" title="Clear Editor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      </button>
+
+      <button id="saveBtn" class="bg-white hover:bg-gray-50 text-green-600 font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center gap-2 border border-gray-200 shadow-sm" title="Save File">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2 2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span class="hidden lg:inline">Save</span>
+      </button>
+
+      <button id="runBtn" class="bg-white hover:bg-gray-50 text-blue-600 font-bold py-2 px-3 rounded-lg transition-all duration-200 flex items-center gap-2 border border-gray-200 shadow-sm" title="Run in New Tab">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <span class="hidden lg:inline">Run</span>
+      </button>
     </div>
-    <label for="fileInput">Import</label>
-    <input type="file" id="fileInput" accept=".html,.htm">
-    <button onclick="clearEditor()">Clear</button>
-    <button onclick="saveFile()">Save</button>
-    <button onclick="openInNewTab()">Run</button>
-    <button onclick="formatCode()">Format</button>
   </header>
 
-  <main>
-    <div class="editor-container">
-      <div class="line-numbers"></div>
-      <textarea id="editor" placeholder="Enter HTML code here..."></textarea>
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col md:flex-row overflow-hidden p-2 sm:p-4 gap-2 sm:gap-4">
+    
+    <!-- Mobile Tabs -->
+    <div class="md:hidden border-b border-gray-200 flex-shrink-0">
+      <div class="flex">
+        <button id="showEditorBtn" class="flex-1 p-3 font-semibold bg-gray-100 border-r border-gray-200">Code</button>
+        <button id="showPreviewBtn" class="flex-1 p-3 font-semibold text-gray-500">Preview</button>
+      </div>
     </div>
-    <iframe id="preview"></iframe>
+
+    <!-- Editor Pane -->
+    <div id="editorPane" class="w-full h-full md:w-1/2 flex flex-col relative bg-white rounded-lg shadow-sm border border-gray-200/80 overflow-hidden">
+      <div class="relative w-full h-full">
+        <div id="lineNumbers" class="absolute left-0 top-0 h-full bg-white text-gray-400 text-right select-none pt-5 pr-4 text-sm font-mono" style="width: 3.5rem; line-height: 1.6;">1</div>
+        <textarea id="editor"
+          class="editor-textarea absolute left-0 top-0 w-full h-full p-5 pl-[4.5rem] bg-transparent text-sm resize-none focus:outline-none"
+          placeholder="Paste your HTML code here..."
+          spellcheck="false"></textarea>
+      </div>
+    </div>
+
+    <!-- Preview Pane -->
+    <div id="previewPane" class="w-full h-full md:w-1/2 bg-white hidden md:block rounded-lg shadow-sm border border-gray-200/80 overflow-hidden">
+      <iframe id="preview" class="w-full h-full border-none"></iframe>
+    </div>
+
   </main>
 
   <script>
+    // Element References
     const editor = document.getElementById('editor');
     const preview = document.getElementById('preview');
     const fileInput = document.getElementById('fileInput');
-    const lineNumbers = document.querySelector('.line-numbers');
+    const lineNumbers = document.getElementById('lineNumbers');
 
-    // Auto preview (debounce)
-    let timer;
-    editor.addEventListener('input', () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        preview.srcdoc = editor.value;
-        updateLineNumbers();
-      }, 300);
+    // Buttons
+    const clearBtn = document.getElementById('clearBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const runBtn = document.getElementById('runBtn');
+    const formatBtn = document.getElementById('formatBtn');
+    
+    // Mobile view elements
+    const showEditorBtn = document.getElementById('showEditorBtn');
+    const showPreviewBtn = document.getElementById('showPreviewBtn');
+    const editorPane = document.getElementById('editorPane');
+    const previewPane = document.getElementById('previewPane');
+
+    // --- Core Logic ---
+    const updatePreview = () => {
+      const code = editor.value;
+      preview.srcdoc = code;
+      
+      const lines = code.split('\n');
+      const lineCount = lines.length || 1;
+      lineNumbers.innerHTML = Array.from({ length: lineCount }, (_, i) => i + 1).join('<br>'); // Use <br> for HTML line breaks
+    };
+
+    editor.addEventListener('input', updatePreview);
+    
+    // Sync scrolling for editor and line numbers
+    editor.addEventListener('scroll', () => {
+        lineNumbers.scrollTop = editor.scrollTop;
     });
 
-    // Update line numbers
-    function updateLineNumbers() {
-      const lines = editor.value.split('\n');
-      const lineCount = lines.length;
-      lineNumbers.innerHTML = '';
-      
-      for (let i = 1; i <= lineCount; i++) {
-        const lineNumber = document.createElement('div');
-        lineNumber.className = 'line-number';
-        lineNumber.textContent = i;
-        lineNumbers.appendChild(lineNumber);
-      }
-    }
+    // --- Button Functionality ---
 
-    // Import file
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          editor.value = evt.target.result;
-          preview.srcdoc = editor.value;
-          updateLineNumbers();
-        };
-        reader.readAsText(file);
-      }
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        editor.value = evt.target.result;
+        updatePreview();
+      };
+      reader.readAsText(file);
+      e.target.value = ''; // Reset input
     });
 
-    // Clear editor
-    function clearEditor() {
+    clearBtn.addEventListener('click', () => {
       editor.value = '';
-      preview.srcdoc = '';
-      updateLineNumbers();
-    }
+      updatePreview();
+    });
 
-    // Save file
-    function saveFile() {
+    saveBtn.addEventListener('click', () => {
       const blob = new Blob([editor.value], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = "index.html";
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }
+    });
 
-    // Run in new tab
-    function openInNewTab() {
-      const newWindow = window.open();
-      newWindow.document.open();
-      newWindow.document.write(editor.value);
-      newWindow.document.close();
-    }
+    runBtn.addEventListener('click', () => {
+      try {
+        const newWindow = window.open();
+        newWindow.document.open();
+        newWindow.document.write(editor.value);
+        newWindow.document.close();
+      } catch (error) {
+        console.error("Could not open new tab. Pop-ups might be blocked.", error);
+        alert("Unable to open new tab. Please allow pop-ups for this site.");
+      }
+    });
 
-    // Format code
-    function formatCode() {
-      editor.value = html_beautify(editor.value, {
-        indent_size: 2,
-        wrap_line_length: 80
-      });
-      preview.srcdoc = editor.value;
-      updateLineNumbers();
-    }
+    formatBtn.addEventListener('click', () => {
+        try {
+            if (typeof html_beautify === 'function') {
+                editor.value = html_beautify(editor.value, {
+                    indent_size: 2,
+                    space_in_empty_paren: true,
+                    wrap_line_length: 100,
+                });
+                updatePreview();
+            } else {
+                throw new Error('html_beautify is not loaded');
+            }
+        } catch(e) {
+            console.error("Formatting failed:", e);
+            alert("Code formatting error. Please check the js-beautify library.");
+        }
+    });
+    
+    // --- Mobile View Logic ---
+    showEditorBtn.addEventListener('click', () => {
+      editorPane.style.display = 'flex';
+      previewPane.style.display = 'none';
+      showEditorBtn.classList.add('bg-gray-100');
+      showEditorBtn.classList.remove('text-gray-500');
+      showPreviewBtn.classList.remove('bg-gray-100');
+      showPreviewBtn.classList.add('text-gray-500');
+    });
 
-    // Initialize line numbers on page load
-    updateLineNumbers();
+    showPreviewBtn.addEventListener('click', () => {
+      editorPane.style.display = 'none';
+      previewPane.style.display = 'block';
+      showPreviewBtn.classList.add('bg-gray-100');
+      showPreviewBtn.classList.remove('text-gray-500');
+      showEditorBtn.classList.remove('bg-gray-100');
+      showEditorBtn.classList.add('text-gray-500');
+    });
+
+    // --- Initialization ---
+    editor.value = ''; // Start with an empty editor
+    updatePreview(); // Initial load
+
   </script>
+
+  <!-- JSON-LD Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebSite",
-        "name": "Text2 - READ HTML",
+        "@type": "WebApplication",
+        "name": "Text2 HTML - Live Editor",
         "url": "https://html.text2.click",
-        "description": "Online HTML editor with live preview. Edit, format, import, and run HTML instantly.",
+        "description": "Online HTML reader and editor with super fast live preview. Optimized for all devices, supports import, format, and instant HTML code execution.",
         "inLanguage": "en",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
         "publisher": {
           "@id": "https://text2.click#org"
         }
@@ -456,5 +290,7 @@
     ]
   }
   </script>
+
 </body>
 </html>
+
